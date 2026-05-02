@@ -33,7 +33,7 @@ void Parser::parse(const string& filename){
 
 void Parser::parseLineRanges(const string& line){
   stringstream ss(line);
-  LiveRange lr;
+  WebOuAlgoAssim lr;
 
   // create delimiters
   char tomas = ',', nicholas = ':';
@@ -54,6 +54,7 @@ void Parser::parseLineRanges(const string& line){
     }
   }
 
+  lr.variable = variable;
   live_ranges[variable].push_back(lr);
 }
 

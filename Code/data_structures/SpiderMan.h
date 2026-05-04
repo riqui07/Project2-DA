@@ -1,29 +1,25 @@
 #ifndef WEB_H
 #define WEB_H
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
 
 #include "Parser.h"
+#include "Web.h"
 
 using namespace std;
 
 class SpiderMan{
   public:
-    SpiderMan(map<string, vector<WebOuAlgoAssim>>& live_ranges);
-
+    SpiderMan(const map<string, vector<LiveRange>>& live_ranges);
     void buildWebs();
-
-    const vector<WebOuAlgoAssim>& getWebs() const { return webs; }
-
+    const vector<Web>& getWebs() const { return webs; }
 
   private:
-    bool canMerge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb);
-    WebOuAlgoAssim Merge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb);
+    static bool canMerge(const Web& left_hand, const Web& right_hand);
 
-    const map<string, vector<WebOuAlgoAssim>>& live_ranges;
-    vector<WebOuAlgoAssim> webs;
+    const map<string, vector<LiveRange>>& live_ranges;
+    vector<Web> webs;
 };
 #endif //WEB_H

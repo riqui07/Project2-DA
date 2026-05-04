@@ -22,18 +22,18 @@ void Parser::parse(const string& filename){
   // check whether we should use the methods to parse a ranges or a registers file
   if (filename.find("ranges") != string::npos){
     for(string line; getline(read, line); ){
-      if (!line.empty() && line.at(0) != '#') parseLineRanges(line); // only parse lines with info
+      if (!line.empty() && line.at(0) != '#') parseLineRanges(line);
     }
   } else{
     for(string line; getline(read, line); ){
-      if (!line.empty() && line.at(0) != '#') parseLineRegisters(line); // only parse lines with info
+      if (!line.empty() && line.at(0) != '#') parseLineRegisters(line);
     }
   }
 }
 
 void Parser::parseLineRanges(const string& line){
   stringstream ss(line);
-  WebOuAlgoAssim lr;
+  LiveRange lr;
 
   // create delimiters
   char tomas = ',', nicholas = ':';
@@ -54,7 +54,6 @@ void Parser::parseLineRanges(const string& line){
     }
   }
 
-  lr.variable = variable;
   live_ranges[variable].push_back(lr);
 }
 

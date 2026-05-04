@@ -8,9 +8,8 @@
 
 using namespace std;
 
-struct WebOuAlgoAssim{
+struct LiveRange{
   vector<int> lines;
-  string variable;
   int birth = -1;
   int death = -1;
 };
@@ -35,11 +34,11 @@ public:
   void parse(const string& filename);
 
   // getter
-  const map<string, vector<WebOuAlgoAssim>>& getLiveRanges() const { return live_ranges; }
+  const map<string, vector<LiveRange>>& getLiveRanges() const { return live_ranges; }
 
 
 private:
-  map<string, vector<WebOuAlgoAssim>> live_ranges;
+  map<string, vector<LiveRange>> live_ranges;
 
   void parseLineRanges(const string& line);
   void parseLineRegisters(const string& line);

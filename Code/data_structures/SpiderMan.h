@@ -14,18 +14,15 @@ class SpiderMan{
   public:
     SpiderMan(map<string, vector<WebOuAlgoAssim>>& live_ranges);
 
-    bool canMerge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb);
-
-    WebOuAlgoAssim Merge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb);
-
-    WebOuAlgoAssim Merger(WebOuAlgoAssim lra, WebOuAlgoAssim lrb);
-
     void buildWebs();
 
     const vector<WebOuAlgoAssim>& getWebs() const { return webs; }
 
 
   private:
+    bool canMerge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb);
+    WebOuAlgoAssim Merge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb);
+
     const map<string, vector<WebOuAlgoAssim>>& live_ranges;
     vector<WebOuAlgoAssim> webs;
 };

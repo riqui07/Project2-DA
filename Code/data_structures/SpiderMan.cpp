@@ -7,13 +7,14 @@
 #include <sstream>
 #include <exception>
 #include <vector>
+#include <algorithm>
 
 #include "Parser.h"
 #include "SpiderMan.h"
 
 SpiderMan::SpiderMan(map<string, vector<WebOuAlgoAssim>>& live_ranges): live_ranges(live_ranges){}
 
-bool SpiderMan::canMerge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb){
+bool SpiderMan::canMerge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb){
     // for each line of both live ranges, if there is a line in common then we can merge both live ranges
     if (lra.variable == lrb.variable){
         for (auto& linea : lra.lines){
@@ -24,13 +25,14 @@ bool SpiderMan::canMerge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb){
             }
         }
 
-        if (lra.death == lrb.birth || lra.birth == lrb.death) return true;
+        if (lra.death != -1 && lrb.birth != -1 && lra.death == lrb.birth) return true;
+        if (lra.birth != -1 && lrb.death != -1 && lra.birth == lrb.death) return true;
     }
 
     return false;
 }
 
-WebOuAlgoAssim SpiderMan::Merge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb){
+WebOuAlgoAssim SpiderMan::Merge(const WebOuAlgoAssim& lra, const WebOuAlgoAssim& lrb){
     WebOuAlgoAssim result;
     result.birth = min(lra.birth, lrb.birth);
     result.death = max(lra.death, lrb.death);
@@ -40,18 +42,9 @@ WebOuAlgoAssim SpiderMan::Merge(WebOuAlgoAssim lra, WebOuAlgoAssim lrb){
     result.lines.insert(result.lines.end(),lrb.lines.begin(), lrb.lines.end());
     sort(result.lines.begin(), result.lines.end());
 
+    result.lines.erase(unique(result.lines.begin(), result.lines.end()), result.lines.end());
+
     return result;
-}
-
-WebOuAlgoAssim SpiderMan::Merger(WebOuAlgoAssim lra, WebOuAlgoAssim lrb){
-    if (canMerge(lra, lrb)) return Merge(lra, lrb);
-    WebOuAlgoAssim newWeb;
-    newWeb.variable = lrb.variable;
-    newWeb.birth = lrb.birth;
-    newWeb.death = lrb.death;
-    newWeb.lines = lrb.lines;
-
-    return newWeb;
 }
 
 void SpiderMan::buildWebs(){
@@ -68,9 +61,8 @@ void SpiderMan::buildWebs(){
         num_changes = 0;
         for (int curr = 0; curr < webs.size(); curr++){
             for (int next = curr + 1; next < webs.size(); next++){
-                WebOuAlgoAssim res = Merger(webs[curr], webs[next]);
-                if (/*condição para verificar se houve merge*/){
-                    webs[curr] = res;
+                if (canMerge(webs[curr], webs[next])){
+                    webs[curr] = Merge(webs[curr], webs[next]);
                     webs.erase(webs.begin() + next);
                     num_changes++;
                     break;

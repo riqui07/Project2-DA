@@ -1,6 +1,7 @@
 #include <iostream>
 #include "data_structures/Parser.h"
 #include "data_structures/SpiderMan.h"
+#include "data_structures/InterferenceMan.h"
 
 using namespace std;
 
@@ -54,6 +55,17 @@ int main() {
     cout << "algorithm: " << reg.algorithm << endl;
     if (reg.numeric_value != -1)
         cout << "numeric_value: " << reg.numeric_value << endl;
+
+    SpiderMan spiderman(parser.getLiveRanges());
+    spiderman.buildWebs();
+
+    InterferenceMan interference_man(spiderman);
+    interference_man.startInterference();
+
+    // const Register& reg = parser.getRegister(); -------- THIS IS DONE ALREADY UPWARDS, THAT IS WHY IT IS COMMENTED
+    if (reg.algorithm == "basic") interference_man.runBasic(reg.num_registers);
+    else if (reg.algorithm == "spilling") interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+    else if (reg.algorithm == "splitting") interference_man.runSplitting(reg.num_registers, reg.numeric_value);
 
     return 0;
 }

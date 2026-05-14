@@ -13,4 +13,6 @@ add_executable(project2
         Code/data_structures/SpiderMan.h
         Code/data_structures/SpiderMan.cpp
         Code/data_structures/Graph.h
+        Code/data_structures/InterferenceMan.cpp
+        Code/data_structures/InterferenceMan.h
 )

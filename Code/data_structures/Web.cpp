@@ -17,6 +17,7 @@ bool Web::interferesWith(const Web &other) const {
         for (auto& other_line : other.lines)
             if (this_line == other_line) return true;
 
+    // i = i + 1
     if (this->death != -1 && other.birth != -1 && this->death == other.birth) return true;
     if (this->birth != -1 && other.death != -1 && this->birth == other.death) return true;
 

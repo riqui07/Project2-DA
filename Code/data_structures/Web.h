@@ -20,6 +20,11 @@ public:
     // getters
     int getBirth() const;
     int getDeath() const;
+
+    // implement operator== for Webs
+    bool operator==(const Web& other) const {
+        return this->variable == other.variable && this->lines == other.lines;
+    }
 private:
     std::string variable;
     int birth;

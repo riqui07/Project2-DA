@@ -9,6 +9,7 @@ int main() {
 
     try {
         parser.parse("Input/ranges/ranges1.txt");
+        parser.parse("Input/registers/registers1.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;
@@ -45,6 +46,14 @@ int main() {
     } catch (runtime_error& e) {
         cerr << "Erro: " << e.what() << endl;
     }
+
+    // print register config
+    const Register& reg = parser.getRegister();
+    cout << "\n=== REGISTERS ===" << endl;
+    cout << "num_registers: " << reg.num_registers << endl;
+    cout << "algorithm: " << reg.algorithm << endl;
+    if (reg.numeric_value != -1)
+        cout << "numeric_value: " << reg.numeric_value << endl;
 
     return 0;
 }

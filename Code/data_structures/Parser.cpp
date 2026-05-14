@@ -59,17 +59,38 @@ void Parser::parseLineRanges(const string& line){
 
 void Parser::parseLineRegisters(const string& line){
   stringstream ss(line);
-  Register reg;
+  string key, value;
 
-  char nicholas = ':';
+  getline(ss, key, ':'); // algorithm
+  getline(ss, value); // basic
 
-  string token;
+  // trim leading space from value
+  if (!value.empty() && value[0] == ' ') value = value.substr(1);
 
-  getline(ss, token, nicholas);
-  getline(ss, token, nicholas);
-  reg.num_registers = stoi(token);
+  if (key == "registers") {
+    this->reg.num_registers = stoi(value);
+  } else if (key == "algorithm") {
+    if (value != "basic") {
+      stringstream as(value);
+      string token;
 
-  getline(ss, token, nicholas);
-  getline(ss, token, nicholas);
-  reg.algorithm = token;
+      // extract the algorithm (spilling / splitting)
+      getline(as, token, ',');
+
+      // trim leading space from the algorithm
+      if (!token.empty() && token[0] == ' ') token = token.substr(1);
+
+      // store the algorithm
+      this->reg.algorithm = token;
+
+      // extract the number
+      getline(as, token);
+
+      // store the number
+      this->reg.numeric_value = stoi(token);
+    }
+    else {
+      this->reg.algorithm = "basic";
+    }
+  }
 }

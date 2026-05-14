@@ -17,6 +17,7 @@ struct LiveRange{
 struct Register{
   int num_registers;
   string algorithm;
+  int numeric_value = -1;
 };
 
 enum ParseType{
@@ -35,10 +36,12 @@ public:
 
   // getter
   const map<string, vector<LiveRange>>& getLiveRanges() const { return live_ranges; }
+  const Register& getRegister() const { return reg; }
 
 
 private:
   map<string, vector<LiveRange>> live_ranges;
+  Register reg;
 
   void parseLineRanges(const string& line);
   void parseLineRegisters(const string& line);

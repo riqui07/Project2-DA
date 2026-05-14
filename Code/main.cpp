@@ -1,49 +1,77 @@
 #include <iostream>
 #include "data_structures/Parser.h"
 #include "data_structures/SpiderMan.h"
+#include "data_structures/Menu.h"
 
 using namespace std;
 
-int main() {
-    Parser parser;
+void usage() {
+    std::cerr << "Usage CLI: myProg\nUsage Batch: myProg -b [ranges] [registers] [allocation]" << std::endl;
+}
 
-    try {
-        parser.parse("Input/ranges/ranges1.txt");
+int main(int argc, char* argv[]) {
+    if (argc != 1 && argc != 5) {
+        usage();
+        return 1;
+    }
 
-        // print live ranges
-        cout << "=== LIVE RANGES ===" << endl;
-        for (auto& [var, ranges] : parser.getLiveRanges()) {
-            cout << "\nVariable: " << var << endl;
-            int i = 0;
-            for (const auto& [lines, birth, death] : ranges) {
-                cout << "  LiveRange " << i++ << ":" << endl;
-                cout << "    birth: " << birth << endl;
-                cout << "    death: " << death << endl;
-                cout << "    lines: ";
-                for (const int& l : lines) cout << l << " ";
-                cout << endl;
+    if (argc == 1) {
+
+        Parser parser;
+
+
+        //show options
+        //show action based on the option
+        while (true)
+        {
+            showMenu();
+            int option_num;
+            string opt_list;
+
+            while (true)
+            {
+                cin >> option_num;
+
+                if (cin.fail() || option_num < 1 || option_num > 6) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Invalid input, please enter a number 1-6: ";
+                } else {
+                    break;
+                }
             }
+
+            switch (option_num)
+            {
+            case 1:
+                cout << "Option 1 not yet Implemented" << endl;
+                break;
+            case 2:
+                cout << "Option 2 not yet Implemented" << endl;
+                break;
+            case 3:
+                cout << "Option 3 not yet Implemented" << endl;
+                break;
+            case 4:
+                cout << "Option 4 not yet Implemented" << endl;
+                break;
+            case 5:
+                cout << "Option 5 not yet Implemented" << endl;
+                break;
+            case 6:
+                //quit
+                byebye();
+                exit(EXIT_SUCCESS);
+            }
+
         }
+    }
 
-        // build and print webs
-        auto live_ranges = parser.getLiveRanges();
-        SpiderMan spiderman(live_ranges);
-        spiderman.buildWebs();
-
-        cout << "\n=== WEBS ===" << endl;
-        int i = 0;
-        for (const auto& web : spiderman.getWebs()) {
-            cout << "\nWeb " << i++ << ":" << endl;
-            cout << "  variable: " << web.getVariable() << endl;
-            cout << "  birth: " << web.getBirth() << endl;
-            cout << "  death: " << web.getDeath() << endl;
-            cout << "  lines: ";
-            for (const int& l : web.getLines()) cout << l << " ";
-            cout << endl;
-        }
-
-    } catch (runtime_error& e) {
-        cerr << "Erro: " << e.what() << endl;
+    // batch mode
+    if (string(argv[1]) != "-b")
+    {
+        usage();
+        return 1;
     }
 
     return 0;

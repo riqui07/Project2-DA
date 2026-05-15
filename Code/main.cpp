@@ -9,8 +9,8 @@ int main() {
     Parser parser;
 
     try {
-        parser.parse("Input/ranges/ranges2.txt");
-        parser.parse("Input/registers/registers2.txt");
+        parser.parse("Input/generated_inputs/ranges/generated_ranges1.txt");
+        parser.parse("Input/generated_inputs/registers/generated_registers1.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;
@@ -78,10 +78,15 @@ int main() {
 
     } else if (reg.algorithm == "spilling") {
         cout << "Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
-        interference_man.runSpilling(reg.num_registers, reg.numeric_value);
-        // Add any getters you have for spilled variables here, e.g.,
-        // cout << "Check InterferenceMan for spilled webs!" << endl;
 
+        // Catch the boolean result
+        bool success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+
+        if (success) {
+            cout << "Result: SUCCESS! The graph was colored after spilling." << endl;
+        } else {
+            cout << "Result: FAILED. Could not color the graph even after spilling." << endl;
+        }
     } else if (reg.algorithm == "splitting") {
         cout << "Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
         interference_man.runSplitting(reg.num_registers, reg.numeric_value);

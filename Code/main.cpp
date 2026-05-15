@@ -94,6 +94,7 @@ int main() {
 
         if (success) {
             cout << "Result: SUCCESS! The graph was colored after splitting." << endl;
+            interference_man.outputResultsSuccess("maboy.txt");
         } else{
             cout << "Result: FAILED. Could not color the graph even after splitting." << endl;
         }

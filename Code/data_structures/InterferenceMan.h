@@ -24,10 +24,22 @@ public:
     const Graph<Web>& getGraph() const { return this->graph; }
     const vector<Web>& getSpilledResult() const { return spilledResult; }
 
+    /**
+* @brief Outputs the results to the output file in case of success
+*/
+    void outputResultsSuccess(string output_filename) const;
+
+    /**
+* @brief Outputs the results to the output file in case of failure
+*/
+    void outputResultsFailure(string output_filename) const;
+
+
 private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
     vector<Web> spilledResult;
+    std::map<Web, int> register_colors;
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

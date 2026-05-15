@@ -3,6 +3,7 @@
 //
 
 #include "InterferenceMan.h"
+#include "Web.h"
 #include <stack>
 #include <set>
 
@@ -109,5 +110,61 @@ bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
     return false;
 }
 
-void InterferenceMan::runSplitting(int nReg, int maxSplits) {
+bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
+    if (runBasic(nReg) != -1) return true;
+
+    Graph<Web> copy = graph;
+
+    for(int numSplits = 0; numSplits <= maxSplits; numSplits++){
+        Vertex<Web>* highestDegree = nullptr;
+        int currentHighest = -1;
+
+        for(auto v : copy.getVertexSet()){
+            int degree = (int)v->getAdj().size();
+            // não podemos dar split a uma web com 1 só linha
+            if (degree > currentHighest && v->getInfo().getLines().size() >= 2) {
+                currentHighest = degree;
+                highestDegree = v;
+            }
+        }
+
+        if(highestDegree == nullptr) break;
+
+        Web mary_jane = highestDegree->getInfo();
+        const vector<int>& lines = mary_jane.getLines();
+        int size_line = lines.size();
+        int mid = size_line/2;
+
+        LiveRange right, left;
+        left.lines = vector<int>(lines.begin(), lines.begin() + mid);
+        left.birth = left.lines.at(0);
+        left.death = left.lines.at(mid - 1);
+
+        right.lines = vector<int>(lines.begin() + mid, lines.end());
+        right.birth = right.lines.at(0);
+        right.death = right.lines.at(mid - 1);
+
+        Web w_left(mary_jane.getVariable(), left);
+        Web w_right(mary_jane.getVariable(), right);
+
+        copy.removeVertex(mary_jane);
+        copy.addVertex(w_left);
+        copy.addVertex(w_right);
+
+        for (auto v : copy.getVertexSet()) {
+            if (v->getInfo() == w_left || v->getInfo() == w_right) continue;
+            Web other = v->getInfo();
+            if (w_left.interferesWith(other))
+                copy.addBidirectionalEdge(w_left, other, 1.0);
+            if (w_right.interferesWith(other))
+                copy.addBidirectionalEdge(w_right, other, 1.0);
+        }
+        if (w_left.interferesWith(w_right))
+            copy.addBidirectionalEdge(w_left, w_right, 1.0);
+
+        if (runBasic(nReg, copy) != -1) {
+            return true;
+        }
+    }
+    return false;
 }

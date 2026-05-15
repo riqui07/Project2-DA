@@ -18,7 +18,7 @@ public:
     int runBasic(int nReg);
     int runBasic(int nReg, Graph<Web> g);
     bool runSpilling(int nReg, int maxSpills);
-    void runSplitting(int nReg, int maxSplits);
+    bool runSplitting(int nReg, int maxSplits);
 
     // getter
     const Graph<Web>& getGraph() const { return this->graph; }

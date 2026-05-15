@@ -25,6 +25,16 @@ public:
     bool operator==(const Web& other) const {
         return this->variable == other.variable && this->lines == other.lines;
     }
+
+    // implement operator< for Webs
+    bool operator<(const Web& other) const {
+        if (this->variable != other.variable) {
+            return (this->variable < other.variable);
+        }
+
+        return (this->lines < other.lines);
+    }
+
 private:
     std::string variable;
     int birth;

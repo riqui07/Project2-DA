@@ -28,7 +28,6 @@ private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
     vector<Web> spilledResult;
-    map<Web, int> color_assignment;
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

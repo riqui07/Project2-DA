@@ -20,10 +20,12 @@ public:
 
     // getter
     const Graph<Web>& getGraph() const { return this->graph; }
+    const vector<Web>& getSpilledResult() const { return spilledResult; }
 
 private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
+    vector<Web> spilledResult;
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

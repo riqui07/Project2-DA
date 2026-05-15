@@ -1,0 +1,3 @@
+registers: 3
+#
+algorithm: spilling, 1

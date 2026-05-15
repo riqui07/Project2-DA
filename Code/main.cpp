@@ -9,8 +9,8 @@ int main() {
     Parser parser;
 
     try {
-        parser.parse("Input/ranges/ranges2.txt");
-        parser.parse("Input/registers/registers2.txt");
+        parser.parse("Input/generated_inputs/ranges/generated_ranges1.txt");
+        parser.parse("Input/generated_inputs/registers/generated_registers1.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;
@@ -62,10 +62,37 @@ int main() {
     InterferenceMan interference_man(spiderman);
     interference_man.startInterference();
 
-    // const Register& reg = parser.getRegister(); -------- THIS IS DONE ALREADY UPWARDS, THAT IS WHY IT IS COMMENTED
-    if (reg.algorithm == "basic") interference_man.runBasic(reg.num_registers);
-    else if (reg.algorithm == "spilling") interference_man.runSpilling(reg.num_registers, reg.numeric_value);
-    else if (reg.algorithm == "splitting") interference_man.runSplitting(reg.num_registers, reg.numeric_value);
 
+    cout << "\n=== ALGORITHM RESULTS ===" << endl;
+
+    if (reg.algorithm == "basic") {
+        int colors_used = interference_man.runBasic(reg.num_registers);
+
+        if (colors_used != -1) {
+            cout << "Result: SUCCESS!" << endl;
+            cout << "The graph was successfully colored using " << colors_used << " registers." << endl;
+        } else {
+            cout << "Result: FAILED." << endl;
+            cout << "Could not color the graph with the provided " << reg.num_registers << " registers." << endl;
+        }
+
+    } else if (reg.algorithm == "spilling") {
+        cout << "Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
+
+        // Catch the boolean result
+        bool success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+
+        if (success) {
+            cout << "Result: SUCCESS! The graph was colored after spilling." << endl;
+        } else {
+            cout << "Result: FAILED. Could not color the graph even after spilling." << endl;
+        }
+    } else if (reg.algorithm == "splitting") {
+        cout << "Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
+        interference_man.runSplitting(reg.num_registers, reg.numeric_value);
+
+    } else {
+        cout << "Unknown algorithm specified in the registers file." << endl;
+    }
     return 0;
 }

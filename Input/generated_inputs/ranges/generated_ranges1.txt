@@ -1,0 +1,6 @@
+# 4 variables all alive at the exact same time
+# this is to simulate a clique
+w: 1+,2,3,4,5-
+x: 1+,2,3,4,5-
+y: 1+,2,3,4,5-
+z: 1+,2,3,4,5-

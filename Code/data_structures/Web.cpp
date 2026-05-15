@@ -28,7 +28,9 @@ Web Web::mergeWith(const Web &other) const {
     LiveRange merged;
 
     // the merged Web will have the earliest birth and the latest death
-    merged.birth = min(this->birth, other.birth);
+    if (this->birth == -1 || other.birth == -1) merged.birth = max(this->birth, other.birth); // this line avoids setting birth to -1
+    else merged.birth = min(this->birth, other.birth);
+
     merged.death = max(this->death, other.death);
 
     // merge both Webs' lines

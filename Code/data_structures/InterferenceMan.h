@@ -14,7 +14,9 @@ public:
     InterferenceMan(const SpiderMan& spiderMan) : peter_parker(spiderMan) {};
 
     void startInterference();
-    void runBasic(int nReg);
+
+    int runBasic(int nReg);
+    int runBasic(int nReg, Graph<Web> g);
     void runSpilling(int nReg, int maxSpills);
     void runSplitting(int nReg, int maxSplits);
 
@@ -24,6 +26,7 @@ public:
 private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
+    map<Web, int> color_assignment;
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

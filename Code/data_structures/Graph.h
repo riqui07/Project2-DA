@@ -102,6 +102,13 @@ protected:
 template <class T>
 class Graph {
 public:
+    Graph() = default;
+    /**
+     * @brief
+     * @param other graph that is copied
+     * @note this can be used to make a deep copy of a graph
+     */
+    Graph(const Graph<T>& other);
     ~Graph();
     /*
     * Auxiliary function to find a vertex with a given the content.
@@ -486,6 +493,17 @@ inline void deleteMatrix(double **m, int n) {
             if (m[i] != nullptr)
                 delete [] m[i];
         delete [] m;
+    }
+}
+
+template<class T>
+Graph<T>::Graph(const Graph<T> &other) {
+    // add vertices
+    for (auto v : other.vertexSet) addVertex(v->getInfo());
+
+    // add edges
+    for (auto v : other.vertexSet) {
+        for (auto e : v->getAdj()) addEdge(v->getInfo(), e->getDest()->getInfo(), e->getWeight());
     }
 }
 

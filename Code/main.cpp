@@ -9,8 +9,8 @@ int main() {
     Parser parser;
 
     try {
-        parser.parse("Input/ranges/ranges1.txt");
-        parser.parse("Input/registers/registers1.txt");
+        parser.parse("Input/ranges/ranges2.txt");
+        parser.parse("Input/registers/registers2.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;

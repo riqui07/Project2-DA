@@ -14,8 +14,8 @@ public:
     InterferenceMan(const SpiderMan& spiderMan) : peter_parker(spiderMan) {};
 
     void startInterference();
-    void runBasic(int nReg);
-    void runSpilling(int nReg, int maxSpills);
+    int runBasic(int nReg);
+    bool runSpilling(int nReg, int maxSpills);
     void runSplitting(int nReg, int maxSplits);
 
     // getter

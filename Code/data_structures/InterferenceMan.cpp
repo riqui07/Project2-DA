@@ -7,11 +7,11 @@
 void InterferenceMan::startInterference() {
 }
 
-void InterferenceMan::runBasic(int nReg) {
+int InterferenceMan::runBasic(int nReg) {
 }
 
-void InterferenceMan::runSpilling(int nReg, int maxSpills) {
-    if (runBasic(nReg,graph) != -1) return true;
+bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
+    if (runBasic(nReg) != -1) return true;
 
     vector<Web> spilledWebs;
     Graph<Web> copy = graph;
@@ -31,7 +31,7 @@ void InterferenceMan::runSpilling(int nReg, int maxSpills) {
         if(highestDegree == nullptr) break;
 
         spilledWebs.push_back(highestDegree->getInfo());
-        copy.removeVertex(bestSpill->getInfo()); 
+        copy.removeVertex(highestDegree->getInfo());
 
         if(runBasic(nReg,copy) != -1){
             spilledResult = spilledWebs; 

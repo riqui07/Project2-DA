@@ -17,15 +17,17 @@ public:
 
     int runBasic(int nReg);
     int runBasic(int nReg, Graph<Web> g);
-    void runSpilling(int nReg, int maxSpills);
+    bool runSpilling(int nReg, int maxSpills);
     void runSplitting(int nReg, int maxSplits);
 
     // getter
     const Graph<Web>& getGraph() const { return this->graph; }
+    const vector<Web>& getSpilledResult() const { return spilledResult; }
 
 private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
+    vector<Web> spilledResult;
     map<Web, int> color_assignment;
 };
 

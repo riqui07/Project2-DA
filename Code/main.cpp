@@ -9,8 +9,8 @@ int main() {
     Parser parser;
 
     try {
-        parser.parse("Input/generated_inputs/ranges/generated_ranges2.txt");
-        parser.parse("Input/generated_inputs/registers/generated_registers2.txt");
+        parser.parse("Input/generated_inputs/ranges/generated_ranges3.txt");
+        parser.parse("Input/generated_inputs/registers/generated_registers3.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;
@@ -97,6 +97,7 @@ int main() {
             interference_man.outputResultsSuccess("maboy.txt");
         } else{
             cout << "Result: FAILED. Could not color the graph even after splitting." << endl;
+            interference_man.outputResultsFailure("maboy.txt");
         }
 
     } else {

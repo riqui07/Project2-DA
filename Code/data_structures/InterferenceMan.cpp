@@ -251,3 +251,43 @@ void InterferenceMan::outputResultsSuccess(string output_filename) const{
         }
     }
 }
+
+void InterferenceMan::outputResultsFailure(string output_filename) const{
+    ofstream output_file("GeneratedOutputs/" + output_filename);
+
+    const vector<Web>& webs = peter_parker.getWebs();
+
+    // não sei se estas duas linhas têm de estar mas é ok yolo
+    output_file << "# Total number of webs followed by the listing of the program points of each one" << endl;
+    output_file << "# program points in each web are sorted in ascending order" << endl;
+
+    output_file << "webs: " << webs.size() << endl;
+
+    for (int i = 0; i < webs.size(); i++){
+        output_file << "web" << i << ": ";
+        const vector<int>& lines = webs[i].getLines();
+        for (auto& line : lines){
+            if (line != lines.back()){
+                if (line == webs[i].getBirth()) output_file << line << "+,";
+                else if (line == webs[i].getDeath()) output_file << line << "-,";
+                else output_file << line << ",";
+            }
+        }
+        if (lines.back() == webs[i].getBirth()) output_file << lines.back() << "+" << endl;
+        else if (lines.back() == webs[i].getDeath()) output_file << lines.back() << "-" << endl;
+        else output_file << lines.back() << endl;
+    }
+
+    output_file << "# Total number of registers used, followed by assignment to webs" << endl;
+
+    set<int> colors;
+    for (auto& [web, color] : register_colors){
+        colors.insert(color);
+    }
+
+    output_file << "registers: 0" << endl;
+
+    for (int i = 0; i < webs.size(); i++) {
+        output_file << "M: web" << i << endl;
+    }
+}

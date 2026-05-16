@@ -200,7 +200,7 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 void InterferenceMan::outputResultsSuccess(string output_filename) const{
-    ofstream output_file("GeneratedOutputs/" + output_filename);
+    ofstream output_file("Output/" + output_filename);
 
     const vector<Web>& webs = peter_parker.getWebs();
 
@@ -253,7 +253,7 @@ void InterferenceMan::outputResultsSuccess(string output_filename) const{
 }
 
 void InterferenceMan::outputResultsFailure(string output_filename) const{
-    ofstream output_file("GeneratedOutputs/" + output_filename);
+    ofstream output_file("Output/" + output_filename);
 
     const vector<Web>& webs = peter_parker.getWebs();
 

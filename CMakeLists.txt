@@ -16,3 +16,9 @@ add_executable(project2
         Code/data_structures/InterferenceMan.cpp
         Code/data_structures/InterferenceMan.h
 )
+
+add_executable(tests Code/tests.cpp
+        Code/data_structures/Parser.cpp
+        Code/data_structures/InterferenceMan.cpp
+        Code/data_structures/Web.cpp
+        Code/data_structures/SpiderMan.cpp)

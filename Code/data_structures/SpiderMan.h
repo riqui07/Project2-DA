@@ -14,6 +14,8 @@ class SpiderMan{
   public:
     SpiderMan(const map<string, vector<LiveRange>>& live_ranges);
     void buildWebs();
+
+    // getter
     const vector<Web>& getWebs() const { return webs; }
 
   private:

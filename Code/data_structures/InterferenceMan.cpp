@@ -505,3 +505,86 @@ void InterferenceMan::outputResultsFailure(string output_filename) const{
         output_file << "M: web" << i << endl;
     }
 }
+
+void InterferenceMan::printResultsSuccess() const{
+
+    const vector<Web>& webs = peter_parker.getWebs();
+
+    cout << "       webs: " << webs.size() << endl;
+
+    for (int i = 0; i < webs.size(); i++){
+        cout << "       web" << i << ": ";
+        const vector<int>& lines = webs[i].getLines();
+        for (auto& line : lines){
+            if (line != lines.back()){
+                if (line == webs[i].getBirth()) cout << line << "+,";
+                else if (line == webs[i].getDeath()) cout << line << "-,";
+                else cout << line << ",";
+            }
+        }
+        if (lines.back() == webs[i].getBirth()) cout << lines.back() << "+" << endl;
+        else if (lines.back() == webs[i].getDeath()) cout << lines.back() << "-" << endl;
+        else cout << lines.back() << endl;
+    }
+
+    cout << endl;
+
+    set<int> colors;
+    for (auto& [web, color] : register_colors){
+        colors.insert(color);
+    }
+
+    cout << "       registers: " << colors.size() << endl;
+
+    for (auto& color: colors){
+        vector<Web> temp;
+
+        for (auto& [web, color_reg] : register_colors){
+            if (color_reg == color) temp.push_back(web);
+        }
+
+        for (auto& value : temp) {
+            for (int i = 0; i < webs.size(); i++) {
+                if (webs[i] == value) {
+                    cout << "       r" << color << ": web" << i << endl;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void InterferenceMan::printResultsFailure() const{
+
+    const vector<Web>& webs = peter_parker.getWebs();
+
+    cout << "       webs: " << webs.size() << endl;
+
+    for (int i = 0; i < webs.size(); i++){
+        cout << "       web" << i << ": ";
+        const vector<int>& lines = webs[i].getLines();
+        for (auto& line : lines){
+            if (line != lines.back()){
+                if (line == webs[i].getBirth()) cout << line << "+,";
+                else if (line == webs[i].getDeath()) cout << line << "-,";
+                else cout << line << ",";
+            }
+        }
+        if (lines.back() == webs[i].getBirth()) cout << lines.back() << "+" << endl;
+        else if (lines.back() == webs[i].getDeath()) cout << lines.back() << "-" << endl;
+        else cout << lines.back() << endl;
+    }
+
+    cout << endl;
+
+    set<int> colors;
+    for (auto& [web, color] : register_colors){
+        colors.insert(color);
+    }
+
+    cout << "       registers: 0" << endl;
+
+    for (int i = 0; i < webs.size(); i++) {
+        cout << "       M: web" << i << endl;
+    }
+}

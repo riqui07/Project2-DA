@@ -58,13 +58,13 @@ void rodar(const string& ran_filename, const string& reg_filename, const string&
 vector<string> validateOutput(const string& gen_filename, const string& exp_filename){
     vector<string> incorrect_lines;
     vector<string> output = parseLines("Output/" + gen_filename);
-    vector<string> expected = parseLines("GeneratedExpectedOutput/" + exp_filename);
+    vector<string> expected = parseLines("Output/GeneratedExpectedOutput/" + exp_filename);
 
     if (output.size() != expected.size()){incorrect_lines.push_back("Incorrect number of lines");}
 
-    for (int i = 0; i < output.size(); i++)
+    for (int i = 0; i < min(output.size(), expected.size()); i++)
     {
-        if (output[i] != expected[i]){incorrect_lines.push_back(output[i]); incorrect_lines.push_back(expected[i]);}
+        if (output.at(i) != expected.at(i)){incorrect_lines.push_back(output.at(i)); incorrect_lines.push_back(expected.at(i));}
     }
     return incorrect_lines;
 }
@@ -80,16 +80,15 @@ int main() {
     };
 
     for (int i = 0; i < testes.size(); i++){
-        rodar(testes[i][0], testes[i][1], testes[i][2]);
-        vector<string> res = validateOutput(testes[i][2], testes[i][3]);
+        rodar(testes.at(i).at(0), testes.at(i).at(1), testes.at(i).at(2));
+        vector<string> res = validateOutput(testes.at(i).at(2), testes.at(i).at(3));
 
         cout << "Test " << i + 1 << ":";
         if (res.empty()) {
             cout << "\033[32m" << " Correct!" << "\033[0m" << endl;
         } else {
             cout << "\033[31m" << " Incorrect!" << "\033[0m" << endl;
-            cout << "\033[31m" << "First Incorrect Line: " << res[0] << "\033[0m" << endl;
-            cout << "\033[31m" << "Should be: " << res[1] << "\033[0m" << endl;
+            cout << "\033[31m" << "First Incorrect Line: " << res.at(0) << "\033[0m" << endl;
         }
     }
 

@@ -79,6 +79,9 @@ public:
     */
     void outputResultsFailure(string output_filename) const;
 
+    void printResultsSuccess() const;
+    void printResultsFailure() const;
+
 
 private:
     // === FIELDS ===

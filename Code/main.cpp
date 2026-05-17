@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
     if (argc == 1) {
 
         Parser parser;
-        SpiderMan* spiderman = nullptr;
-        InterferenceMan* interference_man = nullptr;
+        bool parsedInfo = false;
+        bool allocatedInfo = false;
 
 
         //show options
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
                 if (cin.fail() || option_num < 1 || option_num > 6) {
                     cin.clear();
                     cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
-                    cout << "Invalid input, please enter a number 1-6: ";
+                    cout << " Invalid input, please enter a number 1-6: ";
                 } else {
                     break;
                 }
@@ -49,18 +49,24 @@ int main(int argc, char* argv[]) {
             {
             case 1:
                 input_handler(parser);
+                parsedInfo = true;
                 break;
             case 2:
-                cout << "Option 2 not yet Implemented" << endl;
+                if (parsedInfo) displayParsedInfo(parser);
+                else {cout << endl << "  You need to Load the Input Files before Running this Option." << endl;}
                 break;
             case 3:
-                cout << "Option 3 not yet Implemented" << endl;
+                if (parsedInfo) {runAllocation(parser); allocatedInfo = true;}
+                else {cout << endl << "  You need to Load the Input Files before Running this Option." << endl;}
+
                 break;
             case 4:
-                cout << "Option 4 not yet Implemented" << endl;
+                if (parsedInfo && allocatedInfo) displayAllocationResults(parser);
+                else {cout << endl << "  You need to Load the Input Files and Run the Register Allocation before Running this Option." << endl;}
                 break;
             case 5:
-                cout << "Option 5 not yet Implemented" << endl;
+                if (parsedInfo && allocatedInfo) outputHandler(parser);
+                else {cout << endl << "  You need to Load the Input Files and Run the Register Allocation before Running this Option." << endl;}
                 break;
             case 6:
                 //quit

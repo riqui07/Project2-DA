@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "InterferenceMan.h"
 #include "Parser.h"
 
 using namespace std;
@@ -23,5 +25,23 @@ void byebye();
  */
 void input_handler(Parser& parser);
 
-void displayParsedInfo(const Parser& parser);
+/**
+ * @brief Displays the Info parsed in the Input Handler
+ */
+void displayParsedInfo(Parser parser);
+
+/**
+ * @brief Displays whether the allocation was successful or not
+ */
+bool runAllocation(Parser parser);
+
+/**
+ * @brief Displays the Results of the Register Allocation
+ */
+void displayAllocationResults(Parser parser);
+
+/**
+ * @brief Handles the output to a file
+ */
+void outputHandler(Parser parser);
 #endif //MENU_H

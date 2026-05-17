@@ -70,7 +70,7 @@ void Parser::parseLineRegisters(const string& line){
   if (key == "registers") {
     this->reg.num_registers = stoi(value);
   } else if (key == "algorithm") {
-    if (value != "basic") {
+    if (value != "basic" && value != "free") {
       stringstream as(value);
       string token;
 
@@ -90,7 +90,8 @@ void Parser::parseLineRegisters(const string& line){
       this->reg.numeric_value = stoi(token);
     }
     else {
-      this->reg.algorithm = "basic";
+      if (value == "basic") this->reg.algorithm = "basic";
+      else if (value == "free") this->reg.algorithm = "free";
     }
   }
 }

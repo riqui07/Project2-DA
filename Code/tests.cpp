@@ -84,6 +84,11 @@ int main() {
         {"ranges4.txt", "registers1.txt", "allocation4.txt", "generated_allocation4.txt"},
         {"ranges5.txt", "registers1.txt", "allocation5.txt", "generated_allocation5.txt"},
         {"ranges6.txt", "registers3.txt", "allocation6.txt", "generated_allocation6.txt"},
+        {"ranges_star.txt", "registers_free.txt", "star.txt", "generated_star.txt"},
+        {"ranges_null.txt", "registers_free.txt", "null.txt", "generated_null.txt"},
+        {"ranges_complete.txt", "registers_free.txt", "complete.txt", "generated_complete.txt"},
+        {"ranges_tree.txt", "registers_free.txt", "tree.txt", "generated_tree.txt"},
+        {"ranges_line.txt", "registers_free.txt", "line.txt", "generated_line.txt"},
     };
 
     for (int i = 0; i < testes.size(); i++){

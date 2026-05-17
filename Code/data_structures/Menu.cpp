@@ -208,8 +208,8 @@ bool runAllocation(Parser parser){
   auto end = chrono::high_resolution_clock::now();
   auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
-  if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; }
-  else { cout << "Result: SUCCESS! Graph colored "; cout << "       Time taken: " << duration.count() << " µs" << endl;}
+  if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; cout << "       Algorithm used: " << interference_man.getAlgorithmUsed() << endl; cout << "       Time taken: " << duration.count() << " µs" << endl;}
+  else { cout << "       Result: SUCCESS! Graph colored " << endl; cout << "       Algorithm used: " << interference_man.getAlgorithmUsed() << endl; cout << "       Time taken: " << duration.count() << " µs" << endl;}
 
  } else {
   success = false;
@@ -239,7 +239,7 @@ void displayAllocationResults(Parser parser){
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "free") {
-  success = true;
+  success = interference_man.runFree(reg.num_registers);
 
  } else success = false;
 
@@ -271,7 +271,7 @@ void outputHandler(Parser parser){
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "free"){
-  success = true;
+  success = interference_man.runFree(reg.num_registers);
  }else success = false;
 
  cout << endl;

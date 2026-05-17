@@ -106,6 +106,9 @@ public:
     /// @brief Returns the number of splits performed during runSpilling
     int getNumSplits() const { return nSplits; }
 
+    /// @brief Returns the algorithm used during runFree
+    string getAlgorithmUsed() const { return algorithmUsed;}
+
 private:
     // === FIELDS ===
     const SpiderMan& peter_parker;
@@ -113,6 +116,7 @@ private:
     vector<Web> spilledResult;
     int nSplits;
     std::map<Web, int> register_colors;
+    string algorithmUsed;
 
     // === METHODS ===
     /**

@@ -484,14 +484,15 @@ bool RegAllocator::runSplitting(int nReg, int maxSplits) {
 }
 
 int RegAllocator::runFree(int nReg) {
-    if (isNull(nReg)) return runNull();
-    if (isTrivial(nReg)) return runTrivial();
-    if (isEmpty(nReg)) return runEmpty();
-    if (isComplete(nReg)) return runComplete();
-    if (isStar(nReg)) return runStar();
-    if (isCycle(nReg)) return runCycle();
-    if (isLine(nReg)) return runLine();
-    if (isTree(nReg)) return runTree();
+    if (isNull(nReg)) {algorithmUsed = "Null"; return runNull();}
+    if (isTrivial(nReg)) {algorithmUsed = "Trivial"; return runTrivial();}
+    if (isEmpty(nReg)) {algorithmUsed = "Empty"; return runEmpty();}
+    if (isComplete(nReg)) {algorithmUsed = "Complete"; return runComplete();}
+    if (isStar(nReg)) {algorithmUsed = "Star"; return runStar();}
+    if (isCycle(nReg)) {algorithmUsed = "Cycle"; return runCycle();}
+    if (isLine(nReg)) {algorithmUsed = "Line"; return runLine();}
+    if (isTree(nReg)) {algorithmUsed = "Tree"; return runTree();}
+    algorithmUsed = "Linear Scan";
     return runLinearScan(nReg);
 }
 

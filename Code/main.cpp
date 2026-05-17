@@ -161,8 +161,8 @@ int main(int argc, char* argv[]) {
   auto end = chrono::high_resolution_clock::now();
   auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
-  if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; }
-  else { cout << "Result: SUCCESS! Graph colored "; cout << "       Time taken: " << duration.count() << " µs" << endl;}
+     if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; cout << "       Algorithm used: " << interference_man.getAlgorithmUsed() << endl; cout << "       Time taken: " << duration.count() << " µs" << endl;}
+     else { cout << "Result: SUCCESS! Graph colored "; cout << "       Time taken: " << duration.count() << " µs" << endl;}
 
  } else {
   success = false;

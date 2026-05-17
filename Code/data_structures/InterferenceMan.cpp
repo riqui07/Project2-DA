@@ -12,7 +12,8 @@
 
 using namespace std;
 
-bool InterferenceMan::isStar(){
+bool InterferenceMan::isStar(int nReg){
+    if (nReg < 2) return false;
     int n = graph.getNumVertex();
     if (n < 2) return false;
     int numCenter = 0;
@@ -24,24 +25,27 @@ bool InterferenceMan::isStar(){
     return numCenter == 1;
 }
 
-void InterferenceMan::runStar(){
+int InterferenceMan::runStar(){
     register_colors.clear();
     int n = graph.getNumVertex();
     for (auto v : graph.getVertexSet()){
         if ((int)v->getAdj().size() != 1) register_colors[v->getInfo()] = 0;
         else register_colors[v->getInfo()] = 1;
     }
+    return 2;
 }
 
-bool InterferenceMan::isCycle() {
-    if (graph.getNumVertex() < 3) return false;
+bool InterferenceMan::isCycle(int nReg) {
+    if (graph.getNumVertex() < 3 || nReg < 2) return false;
     for (auto v : graph.getVertexSet()) {
         if ((int)v->getAdj().size() != 2) return false;
     }
+    //odd cycle needs 3 registers
+    if (nReg < 3 && graph.getNumVertex() % 2 != 0) return false;
     return true;
 }
 
-void InterferenceMan::runCycle(){
+int InterferenceMan::runCycle(){
     register_colors.clear();
     auto start = graph.getVertexSet()[0];
     Vertex<Web>* previous = nullptr;
@@ -60,24 +64,31 @@ void InterferenceMan::runCycle(){
         }
     }
     //odd cycles
-    if (register_colors[current->getInfo()] == register_colors[previous->getInfo()]) register_colors[previous->getInfo()] = 2;
+    if (register_colors[current->getInfo()] == register_colors[previous->getInfo()]){
+        register_colors[previous->getInfo()] = 2;
+        return 3;
+    }
+    return 2;
 }
 
-bool InterferenceMan::isComplete() {
+bool InterferenceMan::isComplete(int nReg) {
     int n = graph.getNumVertex();
+    if (n < nReg) return false; 
     for (auto v : graph.getVertexSet()) {
         if ((int)v->getAdj().size() != n-1) return false;
     }
     return true;
 }
 
-void InterferenceMan::runComplete(){
+int InterferenceMan::runComplete(){
     register_colors.clear();
     int current = 0;
     for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = current++;
+    return current;
 }
 
-bool InterferenceMan::isLine() {
+bool InterferenceMan::isLine(int nReg) {
+    if (nReg < 2) return false;
     if (graph.getNumVertex() < 2) return false;
     int endPoints = 0;
     for (auto v : graph.getVertexSet()) {
@@ -88,7 +99,7 @@ bool InterferenceMan::isLine() {
     return endPoints == 2; 
 }
 
-void InterferenceMan::runLine(){
+int InterferenceMan::runLine(){
     register_colors.clear();
     Vertex<Web>* start = nullptr;
     for (auto v : graph.getVertexSet()){
@@ -115,6 +126,7 @@ void InterferenceMan::runLine(){
         previous = current;
         current = next;
     }
+    return 2;
 }
 
 void InterferenceMan::startInterference() {

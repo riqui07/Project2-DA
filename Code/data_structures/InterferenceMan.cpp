@@ -137,11 +137,11 @@ int InterferenceMan::runNull() {
     return 0;
 }
 
-bool InterferenceMan::isLazaro(int nReg) const {
+bool InterferenceMan::isTrivial(int nReg) const {
     return nReg >= 1 && graph.getNumVertex() == 1;
 }
 
-int InterferenceMan::runLazaro() {
+int InterferenceMan::runTrivial() {
     register_colors.clear();
     register_colors[graph.getVertexSet()[0]->getInfo()] = 0;
     return 1;
@@ -286,7 +286,7 @@ int InterferenceMan::runLinearScan(int nReg) {
     return maxRegUsed;
 }
 
-int InterferenceMan::runBasic(int nReg, Graph<Web> g) {
+int InterferenceMan::runBasic(int nReg, const Graph<Web>& g) {
     // make a deep copy of the graph - this copy is where the algorithm will run
     Graph copy(g);
 
@@ -451,14 +451,14 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 int InterferenceMan::runFree(int nReg) {
-    if(isStar(nReg)) runStar();
-    else if (isCycle(nReg)) runCycle();
-    else if (isComplete(nReg)) runComplete();
-    else if (isLine(nReg)) runLine();
-    else if (isNull(nReg)) runNull();
-    else if (isLazaro(nReg)) runLazaro();
-    else if (isEmpty(nReg)) runEmpty();
-    else return runLinearScan(nReg);
+    if (isStar(nReg)) return runStar();
+    if (isCycle(nReg)) return runCycle();
+    if (isComplete(nReg)) return runComplete();
+    if (isLine(nReg)) return runLine();
+    if (isNull(nReg)) return runNull();
+    if (isTrivial(nReg)) return runTrivial();
+    if (isEmpty(nReg)) return runEmpty();
+    return runLinearScan(nReg);
 }
 
 void InterferenceMan::outputResultsSuccess(string output_filename) const{

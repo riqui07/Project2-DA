@@ -54,7 +54,7 @@ public:
 
     /**
      * @brief Runs the free register allocation algorithm.
-     * Checks if the interference graph has a shape for which heuristics have been implemented (star, cycle, complete, line),
+     * Checks if the interference graph has a shape for which heuristics have been implemented (star, cycle, complete, line, null, trivial, empty, tree),
      * if so, use the proper algorithms. If no known shape is found, or if the
      * result uses too many registers, falls back to linear scan. Always finds a solution.
      * @param nReg Number of registers available.

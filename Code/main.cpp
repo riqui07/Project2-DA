@@ -9,8 +9,8 @@ int main() {
     Parser parser;
 
     try {
-        parser.parse("Input/generated_inputs/ranges/generated_ranges2.txt");
-        parser.parse("Input/generated_inputs/registers/generated_registers2.txt");
+        parser.parse("Input/ranges/ranges4.txt");
+        parser.parse("Input/registers/registers1.txt");
 
         // print live ranges
         cout << "=== LIVE RANGES ===" << endl;
@@ -71,9 +71,11 @@ int main() {
         if (colors_used != -1) {
             cout << "Result: SUCCESS!" << endl;
             cout << "The graph was successfully colored using " << colors_used << " registers." << endl;
+            interference_man.outputResultsSuccess("maboy.txt");
         } else {
             cout << "Result: FAILED." << endl;
             cout << "Could not color the graph with the provided " << reg.num_registers << " registers." << endl;
+            interference_man.outputResultsFailure("maboy.txt");
         }
 
     } else if (reg.algorithm == "spilling") {
@@ -84,8 +86,10 @@ int main() {
 
         if (success) {
             cout << "Result: SUCCESS! The graph was colored after spilling." << endl;
+            interference_man.outputResultsSuccess("maboy.txt");
         } else {
             cout << "Result: FAILED. Could not color the graph even after spilling." << endl;
+            interference_man.outputResultsFailure("maboy.txt");
         }
     } else if (reg.algorithm == "splitting") {
         cout << "Running Splitting with max splits: " << reg.numeric_value << "..." << endl;

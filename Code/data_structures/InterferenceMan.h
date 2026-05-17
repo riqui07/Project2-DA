@@ -16,7 +16,8 @@ public:
     /**
      * @brief Builds the interference graph from the webs held by peter_parker.
      * Adds a node for each web and an edge between two nodes if the corresponding webs interfere.
-     * @complexity O(W^2), W is the number of webs.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs.
      */
     void startInterference();
 
@@ -24,7 +25,8 @@ public:
      * @brief Runs the basic graph colouring register allocation algorithm.
      * @param nReg Number of registers available.
      * @return Number of registers used, -1 if allocation is not possible.
-     * @complexity O(W^2 + I), W is the number of webs, I is the number of interferences.
+     *
+     * @note Time Complexity: O(W^2 + I), W is the number of webs, I is the number of interferences.
      */
     int runBasic(int nReg);
 
@@ -34,7 +36,8 @@ public:
      * @param nReg Number of registers available.
      * @param maxSpills Maximum number of webs that can be spilled to memory.
      * @return True if allocation succeeded, false otherwise.
-     * @complexity O(maxSpills * W^2), W is the number of webs.
+     *
+     * @note Time Complexity: O(maxSpills * W^2), W is the number of webs.
      */
     bool runSpilling(int nReg, int maxSpills);
 
@@ -44,7 +47,8 @@ public:
      * @param nReg Number of registers available.
      * @param maxSplits Maximum number of webs that can be split.
      * @return True if allocation succeeded, false otherwise.
-     * @complexity O(maxSplits * W^2), W is the number of webs.
+     *
+     * @note Time Complexity: O(maxSplits * W^2), W is the number of webs.
      */
     bool runSplitting(int nReg, int maxSplits);
 
@@ -62,14 +66,16 @@ public:
     /**
      * @brief Outputs the results to the output file in case of success
      * @param output_filename Name of the output file.
-     * @complexity O(W^2) where W is the number of webs.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs.
      */
     void outputResultsSuccess(string output_filename) const;
 
     /**
     * @brief Outputs the results to the output file in case of failure
     * @param output_filename Name of the output file.
-    * @complexity O(W) where W is the number of webs.
+    *
+    * @note Time Complexity: O(W), W is the number of webs.
     */
     void outputResultsFailure(string output_filename) const;
 
@@ -88,7 +94,8 @@ private:
      * Sorts webs by birth point and greedily assigns registers, spilling the web that dies furthest when no register is available.
      * @param nReg Number of registers available.
      * @return Number of registers used, or -1 if any web was spilled.
-     * @complexity O(W^2) where W is the number of webs. Initial sorting takes O(W log W), but checking which webs have expired for each new web takes O(W^2) overall, which dominates.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs. Initial sorting takes O(W log W), but checking which webs have expired for each new web takes O(W^2) overall, which dominates.
      */
     int runLinearScan(int nReg);
 
@@ -98,7 +105,8 @@ private:
      * @param nReg Number of registers available.
      * @param g Graph to colour.
      * @return Number of registers used, or -1 if allocation is not possible.
-     * @complexity O(W^2), W is the number of webs.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs.
      */
     int runBasic(int nReg, Graph<Web> g);
 };

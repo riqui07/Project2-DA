@@ -28,8 +28,8 @@ enum ParseType{
 class Parser{
 public:
   /**
- * @brief Constructor of a Parser Object
- */
+   * @brief Constructor of a Parser Object
+   */
   Parser();
 
   void parse(const string& filename);

@@ -78,14 +78,15 @@ int main() {
             interference_man.outputResultsFailure("maboy.txt");
         }
 
-    } else if (reg.algorithm == "spilling") {
+        } else if (reg.algorithm == "spilling") {
         cout << "Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
 
         // Catch the boolean result
         bool success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
 
         if (success) {
-            cout << "Result: SUCCESS! The graph was colored after spilling." << endl;
+            int spills = interference_man.getSpilledResult().size();
+            cout << "Result: SUCCESS! The graph was colored after spilling " << spills << " times." << endl;
             interference_man.outputResultsSuccess("maboy.txt");
         } else {
             cout << "Result: FAILED. Could not color the graph even after spilling." << endl;
@@ -97,13 +98,13 @@ int main() {
         bool success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
 
         if (success) {
-            cout << "Result: SUCCESS! The graph was colored after splitting." << endl;
+            int splits = interference_man.getNumSplits();
+            cout << "Result: SUCCESS! The graph was colored after splitting " << splits << " times." << endl;
             interference_man.outputResultsSuccess("maboy.txt");
         } else{
             cout << "Result: FAILED. Could not color the graph even after splitting." << endl;
             interference_man.outputResultsFailure("maboy.txt");
         }
-
     } else {
         cout << "Unknown algorithm specified in the registers file." << endl;
     }

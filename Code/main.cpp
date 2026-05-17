@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 
         if (success) {
             int spills = interference_man.getSpilledResult().size();
-            cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " times." << endl;
+            cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl;
         } else {
             cout << "       Result: FAILED. Could not color the graph even after spilling." << endl;
         }
@@ -134,13 +134,17 @@ int main(int argc, char* argv[]) {
 
         if (success) {
             int splits = interference_man.getNumSplits();
-            cout << "       Result: SUCCESS! The graph was colored after splitting " << splits << " times." << endl;
+            cout << "       Result: SUCCESS! The graph was colored after splitting " << splits << " time(s)." << endl;
         } else{
             cout << "       Result: FAILED. Could not color the graph even after splitting." << endl;
         }
 
     } else if (reg.algorithm == "free") {
-        cout <<
+        success = true;
+
+        if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; }
+        else { cout << "Result: SUCCESS! Graph colored "; }
+
     } else {
         success = false;
         cout << "       Unknown algorithm specified in the registers file." << endl;

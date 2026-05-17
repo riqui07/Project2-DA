@@ -78,12 +78,20 @@ vector<string> validateOutput(const string& gen_filename, const string& exp_file
 
 int main() {
     vector<vector<string>> testes{
+        // === BASIC TESTS ===
         {"ranges1.txt", "registers2.txt", "allocation1.txt", "generated_allocation1.txt"},
         {"ranges2.txt", "registers2.txt", "allocation2.txt", "generated_allocation2.txt"},
         {"ranges3.txt", "registers2.txt", "allocation3.txt", "generated_allocation3.txt"},
         {"ranges4.txt", "registers1.txt", "allocation4.txt", "generated_allocation4.txt"},
         {"ranges5.txt", "registers1.txt", "allocation5.txt", "generated_allocation5.txt"},
         {"ranges6.txt", "registers3.txt", "allocation6.txt", "generated_allocation6.txt"},
+        // === SPILLING TESTS ===
+        {"ranges1.txt", "1reg_1spill.txt", "spill_allocation1.txt", "generated_spill_allocation1.txt"},
+        {"ranges1.txt", "2reg_1spill.txt", "spill_allocation2.txt", "generated_spill_allocation2.txt"},
+        // === SPLITTING TESTS ===
+        {"ranges6.txt", "2reg_1split.txt", "split_allocation1.txt", "generated_split_allocation1.txt"},
+        {"generated_ranges4.txt", "2reg_2split.txt", "split_allocation2.txt", "generated_split_allocation2.txt"},
+        // === FREE TESTS ===
         {"ranges_star.txt", "registers_free.txt", "star.txt", "generated_star.txt"},
         {"ranges_null.txt", "registers_free.txt", "null.txt", "generated_null.txt"},
         {"ranges_complete.txt", "registers_free.txt", "complete.txt", "generated_complete.txt"},

@@ -114,6 +114,7 @@ private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
     vector<Web> spilledResult;
+    vector<Web> splitWebs;
     int nSplits;
     std::map<Web, int> register_colors;
     string algorithmUsed;

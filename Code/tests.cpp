@@ -52,6 +52,13 @@ void rodar(const string& ran_filename, const string& reg_filename, const string&
             interference_man.outputResultsSuccess(output_filename);
         else
             interference_man.outputResultsFailure(output_filename);
+
+    } else if (reg.algorithm == "free") {
+        bool success = interference_man.runFree(reg.num_registers);
+        if (success)
+            interference_man.outputResultsSuccess(output_filename);
+        else
+            interference_man.outputResultsFailure(output_filename);
     }
 }
 

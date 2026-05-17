@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "data_structures/InterferenceMan.h"
+#include "data_structures/RegAllocator.h"
 using namespace std;
 
 vector<string> parseLines(const string& filename)
@@ -27,7 +27,7 @@ void rodar(const string& ran_filename, const string& reg_filename, const string&
     SpiderMan spiderman(parser.getLiveRanges());
     spiderman.buildWebs();
 
-    InterferenceMan interference_man(spiderman);
+    RegAllocator interference_man(spiderman);
     interference_man.startInterference();
 
     const Register& reg = parser.getRegister();

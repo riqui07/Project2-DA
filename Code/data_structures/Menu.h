@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "InterferenceMan.h"
+#include "RegAllocator.h"
 #include "Parser.h"
 
 using namespace std;

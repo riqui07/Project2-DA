@@ -2,7 +2,7 @@
 // Created by baguetes on 14/05/2026.
 //
 
-#include "InterferenceMan.h"
+#include "RegAllocator.h"
 #include "Web.h"
 #include <stack>
 #include <vector>
@@ -12,7 +12,7 @@
 
 using namespace std;
 
-bool InterferenceMan::isStar(int nReg) const {
+bool RegAllocator::isStar(int nReg) const {
     if (nReg < 2) return false;
     int n = graph.getNumVertex();
     if (n < 2) return false;
@@ -25,7 +25,7 @@ bool InterferenceMan::isStar(int nReg) const {
     return numCenter == 1;
 }
 
-int InterferenceMan::runStar(){
+int RegAllocator::runStar(){
     register_colors.clear();
     for (auto v : graph.getVertexSet()){
         if (static_cast<int>(v->getAdj().size()) != 1) register_colors[v->getInfo()] = 0;
@@ -34,7 +34,7 @@ int InterferenceMan::runStar(){
     return 2;
 }
 
-bool InterferenceMan::isCycle(int nReg) const {
+bool RegAllocator::isCycle(int nReg) const {
     if (graph.getNumVertex() < 3 || nReg < 2) return false;
     for (auto v : graph.getVertexSet()) {
         if (static_cast<int>(v->getAdj().size()) != 2) return false;
@@ -44,7 +44,7 @@ bool InterferenceMan::isCycle(int nReg) const {
     return true;
 }
 
-int InterferenceMan::runCycle(){
+int RegAllocator::runCycle(){
     register_colors.clear();
     auto start = graph.getVertexSet()[0];
     Vertex<Web>* previous = nullptr;
@@ -70,7 +70,7 @@ int InterferenceMan::runCycle(){
     return 2;
 }
 
-bool InterferenceMan::isComplete(int nReg) const {
+bool RegAllocator::isComplete(int nReg) const {
     int n = graph.getNumVertex();
     if (nReg < n) return false; 
     for (auto v : graph.getVertexSet()) {
@@ -79,14 +79,14 @@ bool InterferenceMan::isComplete(int nReg) const {
     return true;
 }
 
-int InterferenceMan::runComplete(){
+int RegAllocator::runComplete(){
     register_colors.clear();
     int current = 0;
     for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = current++;
     return current;
 }
 
-bool InterferenceMan::isLine(int nReg) const {
+bool RegAllocator::isLine(int nReg) const {
     if (nReg < 2) return false;
     if (graph.getNumVertex() < 2) return false;
     int endPoints = 0;
@@ -98,7 +98,7 @@ bool InterferenceMan::isLine(int nReg) const {
     return endPoints == 2; 
 }
 
-int InterferenceMan::runLine(){
+int RegAllocator::runLine(){
     register_colors.clear();
     Vertex<Web>* start = nullptr;
     for (auto v : graph.getVertexSet()){
@@ -128,26 +128,26 @@ int InterferenceMan::runLine(){
     return 2;
 }
 
-bool InterferenceMan::isNull(int nReg) const {
+bool RegAllocator::isNull(int nReg) const {
     return graph.getNumVertex() == 0;
 }
 
-int InterferenceMan::runNull() {
+int RegAllocator::runNull() {
     register_colors.clear();
     return 0;
 }
 
-bool InterferenceMan::isTrivial(int nReg) const {
+bool RegAllocator::isTrivial(int nReg) const {
     return nReg >= 1 && graph.getNumVertex() == 1;
 }
 
-int InterferenceMan::runTrivial() {
+int RegAllocator::runTrivial() {
     register_colors.clear();
     register_colors[graph.getVertexSet()[0]->getInfo()] = 0;
     return 1;
 }
 
-bool InterferenceMan::isEmpty(int nReg) const{
+bool RegAllocator::isEmpty(int nReg) const{
     if (nReg < 1) return false;
     for (auto v : graph.getVertexSet()) {
         if (static_cast<int>(v->getAdj().size()) != 0) return false;
@@ -155,13 +155,13 @@ bool InterferenceMan::isEmpty(int nReg) const{
     return true;
 }
 
-int InterferenceMan::runEmpty() {
+int RegAllocator::runEmpty() {
     register_colors.clear();
     for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = 0;
     return 1;
 }
 
-bool InterferenceMan::isTree(int nReg) const {
+bool RegAllocator::isTree(int nReg) const {
     if (nReg < 2) return false;
     int n = graph.getNumVertex();
     if (n < 2) return false;
@@ -171,7 +171,7 @@ bool InterferenceMan::isTree(int nReg) const {
     return edgeCount == n - 1;
 }
 
-int InterferenceMan::runTree() {
+int RegAllocator::runTree() {
     register_colors.clear();
     auto root = graph.getVertexSet()[0];
     std::map<Vertex<Web>*, int> visited;
@@ -193,7 +193,7 @@ int InterferenceMan::runTree() {
     return 2;
 }
 
-void InterferenceMan::startInterference() {
+void RegAllocator::startInterference() {
     // in this case, each Web will be represented by a node in the graph and,
     // for variables where there is an interference, we need to add an edge between their nodes
 
@@ -213,11 +213,11 @@ void InterferenceMan::startInterference() {
     }
 }
 
-int InterferenceMan::runBasic(int nReg) {
+int RegAllocator::runBasic(int nReg) {
     return runBasic(nReg, this->graph);
 }
 
-int InterferenceMan::runLinearScan(int nReg) {
+int RegAllocator::runLinearScan(int nReg) {
     // === SETUP ===
     vector<Web> webs = this->peter_parker.getWebs();
 
@@ -318,7 +318,7 @@ int InterferenceMan::runLinearScan(int nReg) {
     return maxRegUsed;
 }
 
-int InterferenceMan::runBasic(int nReg, const Graph<Web>& g) {
+int RegAllocator::runBasic(int nReg, const Graph<Web>& g) {
     // make a deep copy of the graph - this copy is where the algorithm will run
     Graph copy(g);
 
@@ -391,7 +391,7 @@ int InterferenceMan::runBasic(int nReg, const Graph<Web>& g) {
     return coloursUsed;
 }
 
-bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
+bool RegAllocator::runSpilling(int nReg, int maxSpills) {
     spilledResult.clear();
     if (runBasic(nReg) != -1) return true;
 
@@ -423,7 +423,7 @@ bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
     return false;
 }
 
-bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
+bool RegAllocator::runSplitting(int nReg, int maxSplits) {
     if (runBasic(nReg) != -1) return true;
 
     Graph<Web> copy = graph;
@@ -483,7 +483,7 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
     return false;
 }
 
-int InterferenceMan::runFree(int nReg) {
+int RegAllocator::runFree(int nReg) {
     if (isNull(nReg)) return runNull();
     if (isTrivial(nReg)) return runTrivial();
     if (isEmpty(nReg)) return runEmpty();
@@ -495,7 +495,7 @@ int InterferenceMan::runFree(int nReg) {
     return runLinearScan(nReg);
 }
 
-void InterferenceMan::outputResultsSuccess(string output_filename) const{
+void RegAllocator::outputResultsSuccess(string output_filename) const{
     ofstream output_file("Output/" + output_filename);
 
     const vector<Web>& webs = peter_parker.getWebs();
@@ -548,7 +548,7 @@ void InterferenceMan::outputResultsSuccess(string output_filename) const{
     }
 }
 
-void InterferenceMan::outputResultsFailure(string output_filename) const{
+void RegAllocator::outputResultsFailure(string output_filename) const{
     ofstream output_file("Output/" + output_filename);
 
     const vector<Web>& webs = peter_parker.getWebs();
@@ -588,7 +588,7 @@ void InterferenceMan::outputResultsFailure(string output_filename) const{
     }
 }
 
-void InterferenceMan::printResultsSuccess() const{
+void RegAllocator::printResultsSuccess() const{
 
     const vector<Web>& webs = peter_parker.getWebs();
 
@@ -636,7 +636,7 @@ void InterferenceMan::printResultsSuccess() const{
     }
 }
 
-void InterferenceMan::printResultsFailure() const{
+void RegAllocator::printResultsFailure() const{
 
     const vector<Web>& webs = peter_parker.getWebs();
 

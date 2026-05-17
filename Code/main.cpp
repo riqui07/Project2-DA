@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "data_structures/InterferenceMan.h"
+#include "data_structures/RegAllocator.h"
 #include "data_structures/Parser.h"
 #include "data_structures/SpiderMan.h"
 #include "data_structures/Menu.h"
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
     SpiderMan spiderman(live_ranges);
     spiderman.buildWebs();
 
-    InterferenceMan interference_man(spiderman);
+    RegAllocator interference_man(spiderman);
     interference_man.startInterference();
 
     const Register& reg = parser.getRegister();

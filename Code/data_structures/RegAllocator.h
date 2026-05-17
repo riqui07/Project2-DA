@@ -9,9 +9,9 @@
 #include "SpiderMan.h"
 #include "Web.h"
 
-class InterferenceMan {
+class RegAllocator {
 public:
-    InterferenceMan(const SpiderMan& spiderMan) : peter_parker(spiderMan), nSplits(0) {};
+    RegAllocator(const SpiderMan& spiderMan) : peter_parker(spiderMan), nSplits(0) {};
 
     /**
      * @brief Builds the interference graph from the webs held by peter_parker.
@@ -81,15 +81,6 @@ public:
     */
     void outputResultsFailure(string output_filename) const;
 
-    /// @brief Returns the interference graph.
-    const Graph<Web>& getGraph() const { return this->graph; }
-
-    /// @brief Returns the list of webs that were spilled during allocation
-    const vector<Web>& getSpilledResult() const { return spilledResult; }
-
-    /// @brief Returns the number of splits performed during runSpilling
-    int getNumSplits() const { return nSplits; }
-
     /**
      * @brief Prints the allocation results to the console in case of success.
      * Displays the webs and their assigned registers.
@@ -106,6 +97,14 @@ public:
      */
     void printResultsFailure() const;
 
+    /// @brief Returns the interference graph.
+    const Graph<Web>& getGraph() const { return this->graph; }
+
+    /// @brief Returns the list of webs that were spilled during allocation
+    const vector<Web>& getSpilledResult() const { return spilledResult; }
+
+    /// @brief Returns the number of splits performed during runSpilling
+    int getNumSplits() const { return nSplits; }
 
 private:
     // === FIELDS ===
@@ -274,6 +273,7 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     int runEmpty();
+
     /**
      * @brief Runs the tree register algorithm.
      * Uses BFS 2-colouring starting from an arbitrary node, assigning alternating colours to each level.

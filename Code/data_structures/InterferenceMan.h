@@ -109,6 +109,16 @@ private:
      * @note Time Complexity: O(W^2), W is the number of webs.
      */
     int runBasic(int nReg, Graph<Web> g);
+
+    bool isStar();
+    bool isCycle();
+    bool isComplete();
+    bool isLine();
+
+    void runStar();
+    void runCycle();
+    void runComplete();
+    void runLine();
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

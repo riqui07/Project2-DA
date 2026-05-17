@@ -148,6 +148,9 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     bool isLine(int nReg) const;
+    bool isNull(int nReg) const;
+    bool isLazaro(int nReg) const;
+    bool isEmpty(int nReg) const;
 
     /**
      * @brief Linear scan register allocation algorithm.
@@ -197,6 +200,9 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     int runLine();
+    int runNull();
+    int runLazaro();
+    int runEmpty();
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

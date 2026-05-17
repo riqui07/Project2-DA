@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <chrono>
 #include "Menu.h"
 
 #include "RegAllocator.h"
@@ -149,41 +150,66 @@ bool runAllocation(Parser parser){
  cout << "\033[34m" << "  ╔════════════════════════════════════════════════════════════════════╗" << endl << "\033[0m";
  cout << "\033[34m" << "  ║                     ALLOCATION PROCESS                             ║" << endl << "\033[0m";
  cout << "\033[34m" << "  ╠════════════════════════════════════════════════════════════════════╣" << endl << "\033[0m";
+
  if (reg.algorithm == "basic") {
+  auto start = chrono::high_resolution_clock::now();
   int colors_used = interference_man.runBasic(reg.num_registers);
+  auto end = chrono::high_resolution_clock::now();
+  auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
   if (colors_used != -1) {
    cout << "       Result: SUCCESS!" << endl;
    cout << "       The graph was successfully colored using " << colors_used << " registers." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
    success = true;
   } else {
    cout << "       Result: FAILED." << endl;
    cout << "       Could not color the graph with the provided " << reg.num_registers << " registers." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
    success = false;
   }
 
  } else if (reg.algorithm == "spilling") {
   cout << "       Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
 
+  auto start = chrono::high_resolution_clock::now();
   success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+  auto end = chrono::high_resolution_clock::now();
+  auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
   if (success) {
    int spills = interference_man.getSpilledResult().size();
    cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " times." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
   } else {
    cout << "       Result: FAILED. Could not color the graph even after spilling." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
   }
  } else if (reg.algorithm == "splitting") {
   cout << "       Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
   // Catch the boolean result
+  auto start = chrono::high_resolution_clock::now();
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
+  auto end = chrono::high_resolution_clock::now();
+  auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
   if (success) {
    int splits = interference_man.getNumSplits();
    cout << "       Result: SUCCESS! The graph was colored after splitting " << splits << " times." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
   } else{
    cout << "       Result: FAILED. Could not color the graph even after splitting." << endl;
+   cout << "       Time taken: " << duration.count() << " µs" << endl;
   }
+
+ } else if (reg.algorithm == "free") {
+  auto start = chrono::high_resolution_clock::now();
+  success = interference_man.runFree(reg.num_registers);
+  auto end = chrono::high_resolution_clock::now();
+  auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+
+  if (int spills = interference_man.getSpilledResult().size()) { cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " time(s)." << endl; }
+  else { cout << "Result: SUCCESS! Graph colored "; cout << "       Time taken: " << duration.count() << " µs" << endl;}
 
  } else {
   success = false;
@@ -212,6 +238,9 @@ void displayAllocationResults(Parser parser){
   success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
+ } else if (reg.algorithm == "free") {
+  success = true;
+
  } else success = false;
 
  cout << endl;
@@ -241,7 +270,9 @@ void outputHandler(Parser parser){
   success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
- } else success = false;
+ } else if (reg.algorithm == "free"){
+  success = true;
+ }else success = false;
 
  cout << endl;
  cout << "\033[34m" << "  ╔══════════════════════════════════════════════════════════════════════════╗" << endl << "\033[0m";

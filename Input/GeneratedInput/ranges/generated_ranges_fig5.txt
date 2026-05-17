@@ -1,0 +1,8 @@
+# i: Loop counter, alive through the loop
+i: 2+, 3, 4, 5, 6, 7, 8-
+
+# t1: Local temporary inside BB3
+t1: 5+, 6-
+
+# sum: Alive until final use at 9
+sum: 1+, 2, 3, 4, 5, 6, 7, 8, 9-

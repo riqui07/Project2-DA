@@ -162,8 +162,8 @@ int InterferenceMan::runLinearScan(int nReg) {
 
     // === ALGORITHM ===
     // for each web
-        // if any variable from the active vector died before the current web's birth
-            // free their register
+    // if any variable from the active vector died before the current web's birth
+    // free their register
 
     for (const Web& web : webs) {
         // here I decided to iterate backwards because of removing while iterating
@@ -229,12 +229,17 @@ int InterferenceMan::runLinearScan(int nReg) {
             }
         }
     }
-    
+
     if (spilled.empty()) {
         this->register_colors = assigned_registers;
         return maxRegUsed;
     }
-    return -1;
+
+    this->spilledResult = spilled;
+
+    this->register_colors = assigned_registers;
+
+    return maxRegUsed;
 }
 
 int InterferenceMan::runBasic(int nReg, Graph<Web> g) {

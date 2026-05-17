@@ -13,13 +13,19 @@ Web::Web(const string &variable, const LiveRange &lr) {
 }
 
 bool Web::interferesWith(const Web &other) const {
-    for (auto& this_line : this->lines)
-        for (auto& other_line : other.lines)
-            if (this_line == other_line) return true;
+    for (auto& this_line : this->lines) {
+        for (auto& other_line : other.lines) {
+            if (this_line == other_line) {
+                // this checks if in this line one is born where the other dies
+                bool corner_case = (this_line == this->death && other_line == other.birth) ||
+                                   (this_line == this->birth && other_line == other.death);
 
-    // i = i + 1
-    if (this->death != -1 && other.birth != -1 && this->death == other.birth) return true;
-    if (this->birth != -1 && other.death != -1 && this->birth == other.death) return true;
+                if (!corner_case) {
+                    return true;
+                }
+            }
+        }
+    }
 
     return false;
 }

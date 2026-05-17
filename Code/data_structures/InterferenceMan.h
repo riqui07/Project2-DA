@@ -189,6 +189,7 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     bool isEmpty(int nReg) const;
+    bool isTree(int nReg) const;
 
     /**
      * @brief Linear scan register allocation algorithm.
@@ -264,6 +265,7 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     int runEmpty();
+    int runTree();
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

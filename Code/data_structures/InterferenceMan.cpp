@@ -161,6 +161,38 @@ int InterferenceMan::runEmpty() {
     return 1;
 }
 
+bool InterferenceMan::isTree(int nReg) const {
+    if (nReg < 2) return false;
+    int n = graph.getNumVertex();
+    if (n < 2) return false;
+    int edgeCount = 0;
+    for (auto v : graph.getVertexSet()) edgeCount += static_cast<int>(v->getAdj().size());
+    edgeCount /= 2;
+    return edgeCount == n - 1;
+}
+
+int InterferenceMan::runTree() {
+    register_colors.clear();
+    auto root = graph.getVertexSet()[0];
+    std::map<Vertex<Web>*, int> visited;
+    std::queue<Vertex<Web>*> q;
+    visited[root] = 0;
+    q.push(root);
+    while (!q.empty()) {
+        auto current = q.front();
+        q.pop();
+        register_colors[current->getInfo()] = visited[current];
+        for (auto e : current->getAdj()) {
+            auto dinizz = e->getDest();
+            if(visited.find(dinizz) == visited.end()) {
+                visited[dinizz] = 1 - visited[current];
+                q.push(dinizz);
+            }
+        }
+    }
+    return 2;
+}
+
 void InterferenceMan::startInterference() {
     // in this case, each Web will be represented by a node in the graph and,
     // for variables where there is an interference, we need to add an edge between their nodes
@@ -458,6 +490,7 @@ int InterferenceMan::runFree(int nReg) {
     if (isNull(nReg)) return runNull();
     if (isTrivial(nReg)) return runTrivial();
     if (isEmpty(nReg)) return runEmpty();
+    if (isTree(nReg)) return runTree();
     return runLinearScan(nReg);
 }
 

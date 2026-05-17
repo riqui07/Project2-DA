@@ -77,12 +77,83 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // batch mode
+    // batch mode: -b ranges1.txt registers2.txt batch.txt
     if (string(argv[1]) != "-b")
     {
         usage();
         return 1;
     }
 
+    Parser parser;
+    parser.parse("Input/ranges/" + string(argv[2]));
+    parser.parse("Input/registers/" + string(argv[3]));
+
+    auto live_ranges = parser.getLiveRanges();
+    SpiderMan spiderman(live_ranges);
+    spiderman.buildWebs();
+
+    InterferenceMan interference_man(spiderman);
+    interference_man.startInterference();
+
+    const Register& reg = parser.getRegister();
+
+    bool success;
+
+    cout << "\n";
+    cout << "\033[34m" << "  ╔════════════════════════════════════════════════════════════════════╗" << endl << "\033[0m";
+    cout << "\033[34m" << "  ║                     ALLOCATION PROCESS                             ║" << endl << "\033[0m";
+    cout << "\033[34m" << "  ╠════════════════════════════════════════════════════════════════════╣" << endl << "\033[0m";
+    if (reg.algorithm == "basic") {
+        int colors_used = interference_man.runBasic(reg.num_registers);
+
+        if (colors_used != -1) {
+            cout << "       Result: SUCCESS!" << endl;
+            cout << "       The graph was successfully colored using " << colors_used << " registers." << endl;
+            success = true;
+        } else {
+            cout << "       Result: FAILED." << endl;
+            cout << "       Could not color the graph with the provided " << reg.num_registers << " registers." << endl;
+            success = false;
+            }
+
+        } else if (reg.algorithm == "spilling") {
+            cout << "       Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
+
+            success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+
+        if (success) {
+            cout << "       Result: SUCCESS! The graph was colored after spilling." << endl;
+            } else {
+            cout << "       Result: FAILED. Could not color the graph even after spilling." << endl;
+            }
+        } else if (reg.algorithm == "splitting") {
+            cout << "       Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
+            // Catch the boolean result
+            success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
+
+            if (success) {
+                cout << "       Result: SUCCESS! The graph was colored after splitting." << endl;
+            } else{
+                cout << "       Result: FAILED. Could not color the graph even after splitting." << endl;
+            }
+
+        } else {
+            cout << "       Unknown algorithm specified in the registers file." << endl;
+        }
+            cout << "  ╚════════════════════════════════════════════════════════════════════╝" << endl;
+
+    cout << endl;
+    cout << "\033[34m" << "  ╔══════════════════════════════════════════════════════════════╗" << endl << "\033[0m";
+    cout << "\033[34m" << "  ║                   ALGORITHM RESULTS                          ║" << endl << "\033[0m";
+    cout << "\033[34m" << "  ╠══════════════════════════════════════════════════════════════╣" << endl << "\033[0m";
+    if (success) interference_man.printResultsSuccess();
+    else{interference_man.printResultsFailure();}
+    cout << "  ╚══════════════════════════════════════════════════════════════╝" << endl;
+
+    if (success) interference_man.outputResultsSuccess(string(argv[4]));
+    else{interference_man.outputResultsFailure(string(argv[4]));}
+
+    cout << endl;
+    cout << "  This information is available in Output/" + string(argv[4]) << endl;
     return 0;
 }

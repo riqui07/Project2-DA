@@ -263,12 +263,12 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 
         LiveRange right, left;
         left.lines = vector<int>(lines.begin(), lines.begin() + mid);
-        left.birth = left.lines.at(0);
-        left.death = left.lines.at(mid - 1);
+        left.birth = left.lines.front();
+        left.death = left.lines.back();
 
         right.lines = vector<int>(lines.begin() + mid, lines.end());
-        right.birth = right.lines.at(0);
-        right.death = right.lines.at(mid - 1);
+        right.birth = right.lines.front();
+        right.death = right.lines.back();
 
         Web w_left(mary_jane.getVariable(), left);
         Web w_right(mary_jane.getVariable(), right);

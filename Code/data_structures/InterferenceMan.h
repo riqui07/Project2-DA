@@ -89,7 +89,21 @@ public:
 
     /// @brief Returns the number of splits performed during runSpilling
     int getNumSplits() const { return nSplits; }
+
+    /**
+     * @brief Prints the allocation results to the console in case of success.
+     * Displays the webs and their assigned registers.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs.
+     */
     void printResultsSuccess() const;
+
+    /**
+     * @brief Prints the allocation results to the console in case of failure.
+     * Displays the webs and assigns them all to memory (M).
+     *
+     * @note Time Complexity: O(W), W is the number of webs.
+     */
     void printResultsFailure() const;
 
 
@@ -111,7 +125,7 @@ private:
      *
      * @note Time Complexity: O(W^2), W is the number of webs.
      */
-    int runBasic(int nReg, const Graph<Web>& g);
+    int runBasic(int nReg, Graph<Web> g);
 
     /**
      * @brief Checks if the interference graph is a star (one central node connected to all others).

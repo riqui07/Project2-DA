@@ -189,6 +189,15 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     bool isEmpty(int nReg) const;
+
+    /**
+     * @brief Checks if the interference graph is a tree.
+     * A tree is a connected acyclic graph with exaclty n-1 edges.
+     * @param nReg Number of registers available.
+     * @return True if the graph is a tree, false otherwise.
+     *
+     * @note Time Complexity: O(W), W is the number of webs.
+     */
     bool isTree(int nReg) const;
 
     /**
@@ -265,6 +274,13 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     int runEmpty();
+    /**
+     * @brief Runs the tree register algorithm.
+     * Uses BFS 2-colouring starting from an arbitrary node, assigning alternating colours to each level.
+     * @return Number of registers used (always 2 for a tree).
+     *
+     * @note Time Complexity: O(W + I), W is the number of webs, I is the number of interferences.
+     */
     int runTree();
 };
 

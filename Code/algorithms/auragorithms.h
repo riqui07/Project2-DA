@@ -8,14 +8,6 @@
 #include "../data_structures/Web.h"
 #include <algorithm>
 
-int free() {
-    // line()
-
-    // circle()
-
-    // linear_scan()
-}
-
 int linear_scan(vector<Web> webs, int maxReg) {
     // === SETUP ===
     // sort webs by birth

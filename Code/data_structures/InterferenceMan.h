@@ -11,7 +11,7 @@
 
 class InterferenceMan {
 public:
-    InterferenceMan(const SpiderMan& spiderMan) : peter_parker(spiderMan) {};
+    InterferenceMan(const SpiderMan& spiderMan) : peter_parker(spiderMan), nSplits(0) {};
 
     /**
      * @brief Builds the interference graph from the webs held by peter_parker.
@@ -88,22 +88,22 @@ public:
     const vector<Web>& getSpilledResult() const { return spilledResult; }
 
     /// @brief Returns the number of splits performed during runSpilling
-    const int getNumSplits() const { return nSplits; }
+    int getNumSplits() const { return nSplits; }
 
     /**
- * @brief Prints the allocation results to the console in case of success.
- * Displays the webs and their assigned registers.
- *
- * @note Time Complexity: O(W^2), W is the number of webs.
- */
+     * @brief Prints the allocation results to the console in case of success.
+     * Displays the webs and their assigned registers.
+     *
+     * @note Time Complexity: O(W^2), W is the number of webs.
+     */
     void printResultsSuccess() const;
 
     /**
- * @brief Prints the allocation results to the console in case of failure.
- * Displays the webs and assigns them all to memory (M).
- *
- * @note Time Complexity: O(W), W is the number of webs.
- */
+     * @brief Prints the allocation results to the console in case of failure.
+     * Displays the webs and assigns them all to memory (M).
+     *
+     * @note Time Complexity: O(W), W is the number of webs.
+     */
     void printResultsFailure() const;
 
 
@@ -125,7 +125,7 @@ private:
      *
      * @note Time Complexity: O(W^2), W is the number of webs.
      */
-    int runBasic(int nReg, Graph<Web> g);
+    int runBasic(int nReg, const Graph<Web>& g);
 
     /**
      * @brief Checks if the interference graph is a star (one central node connected to all others).
@@ -162,9 +162,34 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     bool isLine(int nReg) const;
+
+    /**
+     * @brief Checks if the interference graph has no nodes.
+     * @param nReg Number of registers available.
+     * @return True if the graph is empty, false otherwise.
+     *
+     * @note Time Complexity: O(1).
+     */
     bool isNull(int nReg) const;
-    bool isLazaro(int nReg) const;
+
+    /**
+     * @brief Checks if the interference graph has exactly one node.
+     * @param nReg Number of registers available.
+     * @return True if the graph has a single node, false otherwise.
+     *
+     * @note Time Complexity: O(1).
+     */
+    bool isTrivial(int nReg) const;
+
+    /**
+     * @brief Checks if the interference graph has no edges (no interferences between webs).
+     * @param nReg Number of registers available.
+     * @return True if the graph has no edges, false otherwise.
+     *
+     * @note Time Complexity: O(W), W is the number of webs.
+     */
     bool isEmpty(int nReg) const;
+    bool isTree(int nReg) const;
 
     /**
      * @brief Linear scan register allocation algorithm.
@@ -214,9 +239,33 @@ private:
      * @note Time Complexity: O(W), W is the number of webs.
      */
     int runLine();
+
+    /**
+     * @brief Runs register allocation for a null graph (no webs).
+     * @return Number of registers used (always 0).
+     *
+     * @note Time Complexity: O(1).
+     */
     int runNull();
-    int runLazaro();
+
+    /**
+     * @brief Runs register allocation for a single-node graph.
+     * Assigns colour 0 to the only web.
+     * @return Number of registers used (always 1).
+     *
+     * @note Time Complexity: O(1).
+     */
+    int runTrivial();
+
+    /**
+     * @brief Runs register allocation for a graph with no edges.
+     * Assigns colour 0 to all webs since none of them interfere.
+     * @return Number of registers used (always 1).
+     *
+     * @note Time Complexity: O(W), W is the number of webs.
+     */
     int runEmpty();
+    int runTree();
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

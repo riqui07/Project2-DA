@@ -137,11 +137,11 @@ int InterferenceMan::runNull() {
     return 0;
 }
 
-bool InterferenceMan::isLazaro(int nReg) const {
+bool InterferenceMan::isTrivial(int nReg) const {
     return nReg >= 1 && graph.getNumVertex() == 1;
 }
 
-int InterferenceMan::runLazaro() {
+int InterferenceMan::runTrivial() {
     register_colors.clear();
     register_colors[graph.getVertexSet()[0]->getInfo()] = 0;
     return 1;
@@ -159,6 +159,38 @@ int InterferenceMan::runEmpty() {
     register_colors.clear();
     for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = 0;
     return 1;
+}
+
+bool InterferenceMan::isTree(int nReg) const {
+    if (nReg < 2) return false;
+    int n = graph.getNumVertex();
+    if (n < 2) return false;
+    int edgeCount = 0;
+    for (auto v : graph.getVertexSet()) edgeCount += static_cast<int>(v->getAdj().size());
+    edgeCount /= 2;
+    return edgeCount == n - 1;
+}
+
+int InterferenceMan::runTree() {
+    register_colors.clear();
+    auto root = graph.getVertexSet()[0];
+    std::map<Vertex<Web>*, int> visited;
+    std::queue<Vertex<Web>*> q;
+    visited[root] = 0;
+    q.push(root);
+    while (!q.empty()) {
+        auto current = q.front();
+        q.pop();
+        register_colors[current->getInfo()] = visited[current];
+        for (auto e : current->getAdj()) {
+            auto dinizz = e->getDest();
+            if(visited.find(dinizz) == visited.end()) {
+                visited[dinizz] = 1 - visited[current];
+                q.push(dinizz);
+            }
+        }
+    }
+    return 2;
 }
 
 void InterferenceMan::startInterference() {
@@ -286,7 +318,7 @@ int InterferenceMan::runLinearScan(int nReg) {
     return maxRegUsed;
 }
 
-int InterferenceMan::runBasic(int nReg, Graph<Web> g) {
+int InterferenceMan::runBasic(int nReg, const Graph<Web>& g) {
     // make a deep copy of the graph - this copy is where the algorithm will run
     Graph copy(g);
 
@@ -451,14 +483,15 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 int InterferenceMan::runFree(int nReg) {
-    if(isStar(nReg)) runStar();
-    else if (isCycle(nReg)) runCycle();
-    else if (isComplete(nReg)) runComplete();
-    else if (isLine(nReg)) runLine();
-    else if (isNull(nReg)) runNull();
-    else if (isLazaro(nReg)) runLazaro();
-    else if (isEmpty(nReg)) runEmpty();
-    else return runLinearScan(nReg);
+    if (isStar(nReg)) return runStar();
+    if (isCycle(nReg)) return runCycle();
+    if (isComplete(nReg)) return runComplete();
+    if (isLine(nReg)) return runLine();
+    if (isNull(nReg)) return runNull();
+    if (isTrivial(nReg)) return runTrivial();
+    if (isEmpty(nReg)) return runEmpty();
+    if (isTree(nReg)) return runTree();
+    return runLinearScan(nReg);
 }
 
 void InterferenceMan::outputResultsSuccess(string output_filename) const{

@@ -128,6 +128,39 @@ int InterferenceMan::runLine(){
     return 2;
 }
 
+bool InterferenceMan::isNull(int nReg) const {
+    return graph.getNumVertex() == 0;
+}
+
+int InterferenceMan::runNull() {
+    register_colors.clear();
+    return 0;
+}
+
+bool InterferenceMan::isLazaro(int nReg) const {
+    return nReg >= 1 && graph.getNumVertex() == 1;
+}
+
+int InterferenceMan::runLazaro() {
+    register_colors.clear();
+    register_colors[graph.getVertexSet()[0]->getInfo()] = 0;
+    return 1;
+}
+
+bool InterferenceMan::isEmpty(int nReg) const{
+    if (nReg < 1) return false;
+    for (auto v : graph.getVertexSet()) {
+        if (static_cast<int>(v->getAdj().size() != 0)) return false;
+    }
+    return true;
+}
+
+int InterferenceMan::runEmpty() {
+    register_colors.clear();
+    for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = 0;
+    return 1;
+}
+
 void InterferenceMan::startInterference() {
     // in this case, each Web will be represented by a node in the graph and,
     // for variables where there is an interference, we need to add an edge between their nodes
@@ -422,6 +455,9 @@ int InterferenceMan::runFree(int nReg) {
     else if (isCycle(nReg)) runCycle();
     else if (isComplete(nReg)) runComplete();
     else if (isLine(nReg)) runLine();
+    else if (isNull(nReg)) runNull();
+    else if (isLazaro(nReg)) runLazaro();
+    else if (isEmpty(nReg)) runEmpty();
     else return runLinearScan(nReg);
 }
 

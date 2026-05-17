@@ -3,7 +3,7 @@
 #include <string>
 #include "Menu.h"
 
-#include "InterferenceMan.h"
+#include "RegAllocator.h"
 #include "Parser.h"
 #include "SpiderMan.h"
 using namespace std;
@@ -138,7 +138,7 @@ bool runAllocation(Parser parser){
  SpiderMan spiderman(live_ranges);
  spiderman.buildWebs();
 
- InterferenceMan interference_man(spiderman);
+ RegAllocator interference_man(spiderman);
  interference_man.startInterference();
 
  const Register& reg = parser.getRegister();
@@ -186,6 +186,7 @@ bool runAllocation(Parser parser){
   }
 
  } else {
+  success = false;
   cout << "       Unknown algorithm specified in the registers file." << endl;
  }
   cout << "  ╚════════════════════════════════════════════════════════════════════╝" << endl;
@@ -198,7 +199,7 @@ void displayAllocationResults(Parser parser){
  SpiderMan spiderman(live_ranges);
  spiderman.buildWebs();
 
- InterferenceMan interference_man(spiderman);
+ RegAllocator interference_man(spiderman);
  interference_man.startInterference();
 
  const Register& reg = parser.getRegister();
@@ -211,7 +212,7 @@ void displayAllocationResults(Parser parser){
   success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
- }
+ } else success = false;
 
  cout << endl;
  cout << "\033[34m" << "  ╔══════════════════════════════════════════════════════════════╗" << endl << "\033[0m";
@@ -227,7 +228,7 @@ void outputHandler(Parser parser){
  SpiderMan spiderman(live_ranges);
  spiderman.buildWebs();
 
- InterferenceMan interference_man(spiderman);
+ RegAllocator interference_man(spiderman);
  interference_man.startInterference();
 
  const Register& reg = parser.getRegister();
@@ -240,7 +241,7 @@ void outputHandler(Parser parser){
   success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
  } else if (reg.algorithm == "splitting") {
   success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
- }
+ } else success = false;
 
  cout << endl;
  cout << "\033[34m" << "  ╔══════════════════════════════════════════════════════════════════════════╗" << endl << "\033[0m";

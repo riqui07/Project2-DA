@@ -65,7 +65,7 @@ void rodar(const string& ran_filename, const string& reg_filename, const string&
 vector<string> validateOutput(const string& gen_filename, const string& exp_filename){
     vector<string> incorrect_lines;
     vector<string> output = parseLines("Output/" + gen_filename);
-    vector<string> expected = parseLines("Output/GeneratedExpectedOutput/" + exp_filename);
+    vector<string> expected = parseLines("Output/" + exp_filename);
 
     if (output.size() != expected.size()){incorrect_lines.push_back("Incorrect number of lines");}
 

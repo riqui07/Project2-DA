@@ -15,7 +15,7 @@ add_executable(project2
         Code/data_structures/Graph.h
         Code/data_structures/InterferenceMan.cpp
         Code/data_structures/InterferenceMan.h
-        Code/algorithms/free.h
+        Code/algorithms/auragorithms.h
 )
 
 add_executable(tests Code/tests.cpp

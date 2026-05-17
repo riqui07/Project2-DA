@@ -16,7 +16,6 @@ int free() {
     // linear_scan()
 }
 
-
 int linear_scan(vector<Web> webs, int maxReg) {
     // === SETUP ===
     // sort webs by birth

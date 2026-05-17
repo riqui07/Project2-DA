@@ -150,7 +150,7 @@ int InterferenceMan::runTrivial() {
 bool InterferenceMan::isEmpty(int nReg) const{
     if (nReg < 1) return false;
     for (auto v : graph.getVertexSet()) {
-        if (static_cast<int>(v->getAdj().size() != 0)) return false;
+        if (static_cast<int>(v->getAdj().size()) != 0) return false;
     }
     return true;
 }
@@ -392,6 +392,7 @@ int InterferenceMan::runBasic(int nReg, const Graph<Web>& g) {
 }
 
 bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
+    spilledResult.clear();
     if (runBasic(nReg) != -1) return true;
 
     vector<Web> spilledWebs;
@@ -483,13 +484,13 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 int InterferenceMan::runFree(int nReg) {
-    if (isStar(nReg)) return runStar();
-    if (isCycle(nReg)) return runCycle();
-    if (isComplete(nReg)) return runComplete();
-    if (isLine(nReg)) return runLine();
     if (isNull(nReg)) return runNull();
     if (isTrivial(nReg)) return runTrivial();
     if (isEmpty(nReg)) return runEmpty();
+    if (isComplete(nReg)) return runComplete();
+    if (isStar(nReg)) return runStar();
+    if (isCycle(nReg)) return runCycle();
+    if (isLine(nReg)) return runLine();
     if (isTree(nReg)) return runTree();
     return runLinearScan(nReg);
 }

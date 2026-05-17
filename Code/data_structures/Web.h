@@ -12,12 +12,27 @@
 class Web {
 public:
     Web(const string& variable, const LiveRange& lr);
+
+    /**
+      * @brief Checks if this web interferes with another web.
+      * Two webs interfere if they share at least one program point, or if one starts where the other ends (i = i + 1 case).
+      * @param other The other web.
+      * @return True if the webs interfere, false otherwise.
+      * @complexity O(L1 * L2) where L1 and L2 are the number of lines in each web.
+      */
     bool interferesWith(const Web& other) const;
+
+    /**
+     * @brief Merges this web with another web of the same variable.
+     * Merges the lines of both webs, keeping the earliest birth and the latest death.
+     * @param other The other web to merge with.
+     * @return A new merged Web object.
+     * @complexity O(L log L) where L is the total number of lines in both webs, due to sorting.
+     */
     Web mergeWith(const Web& other) const;
+
     const string& getVariable() const;
     const vector<int>& getLines() const;
-
-    // getters
     int getBirth() const;
     int getDeath() const;
 

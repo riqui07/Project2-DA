@@ -52,7 +52,7 @@ int InterferenceMan::runCycle(){
     Vertex<Web>* current = start;
     int color = 0;
     while(register_colors.find(current->getInfo()) == register_colors.end()) {
-        register_colors[current->getInfo()];
+        register_colors[current->getInfo()] = color;
         if (color == 0) color = 1;
         else color = 0;
         for(auto e : current->getAdj()) {
@@ -73,7 +73,7 @@ int InterferenceMan::runCycle(){
 
 bool InterferenceMan::isComplete(int nReg) {
     int n = graph.getNumVertex();
-    if (n < nReg) return false; 
+    if (nReg < n) return false; 
     for (auto v : graph.getVertexSet()) {
         if ((int)v->getAdj().size() != n-1) return false;
     }
@@ -411,6 +411,7 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
             copy.addBidirectionalEdge(w_left, w_right, 1.0);
 
         if (runBasic(nReg, copy) != -1) {
+            nSplits = numSplits;
             return true;
         }
     }
@@ -418,10 +419,10 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 int InterferenceMan::runFree(int nReg) {
-    if(isStar()) runStar();
-    else if (isCycle()) runCycle();
-    else if (isComplete()) runComplete();
-    else if (isLine()) runLine();
+    if(isStar(nReg)) runStar();
+    else if (isCycle(nReg)) runCycle();
+    else if (isComplete(nReg)) runComplete();
+    else if (isLine(nReg)) runLine();
     else return runLinearScan(nReg);
 
     int maxColor = 0;

@@ -114,31 +114,36 @@ int main(int argc, char* argv[]) {
             cout << "       Result: FAILED." << endl;
             cout << "       Could not color the graph with the provided " << reg.num_registers << " registers." << endl;
             success = false;
-            }
+        }
 
-        } else if (reg.algorithm == "spilling") {
-            cout << "       Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
+    } else if (reg.algorithm == "spilling") {
+        cout << "       Running Spilling with max spills: " << reg.numeric_value << "..." << endl;
 
-            success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
+        success = interference_man.runSpilling(reg.num_registers, reg.numeric_value);
 
         if (success) {
-            cout << "       Result: SUCCESS! The graph was colored after spilling." << endl;
-            } else {
-            cout << "       Result: FAILED. Could not color the graph even after spilling." << endl;
-            }
-        } else if (reg.algorithm == "splitting") {
-            cout << "       Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
-            // Catch the boolean result
-            success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
-
-            if (success) {
-                cout << "       Result: SUCCESS! The graph was colored after splitting." << endl;
-            } else{
-                cout << "       Result: FAILED. Could not color the graph even after splitting." << endl;
-            }
-
+            int spills = interference_man.getSpilledResult().size();
+            cout << "       Result: SUCCESS! The graph was colored after spilling " << spills << " times." << endl;
         } else {
-            cout << "       Unknown algorithm specified in the registers file." << endl;
+            cout << "       Result: FAILED. Could not color the graph even after spilling." << endl;
+        }
+    } else if (reg.algorithm == "splitting") {
+        cout << "       Running Splitting with max splits: " << reg.numeric_value << "..." << endl;
+        // Catch the boolean result
+        success = interference_man.runSplitting(reg.num_registers, reg.numeric_value);
+
+        if (success) {
+            int splits = interference_man.getNumSplits();
+            cout << "       Result: SUCCESS! The graph was colored after splitting " << splits << " times." << endl;
+        } else{
+            cout << "       Result: FAILED. Could not color the graph even after splitting." << endl;
+        }
+
+    } else if (reg.algorithm == "free") {
+        cout <<
+    } else {
+        success = false;
+        cout << "       Unknown algorithm specified in the registers file." << endl;
         }
             cout << "  ╚════════════════════════════════════════════════════════════════════╝" << endl;
 

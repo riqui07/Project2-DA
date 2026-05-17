@@ -62,6 +62,7 @@ public:
     // getter
     const Graph<Web>& getGraph() const { return this->graph; }
     const vector<Web>& getSpilledResult() const { return spilledResult; }
+    const int getNumSplits() const { return nSplits; }
 
     /**
      * @brief Outputs the results to the output file in case of success
@@ -85,6 +86,7 @@ private:
     const SpiderMan& peter_parker;
     Graph<Web> graph;
     vector<Web> spilledResult;
+    int nSplits;
     std::map<Web, int> register_colors;
 
     // === METHODS ===
@@ -110,15 +112,15 @@ private:
      */
     int runBasic(int nReg, Graph<Web> g);
 
-    bool isStar();
-    bool isCycle();
-    bool isComplete();
-    bool isLine();
+    bool isStar(int nReg);
+    bool isCycle(int nReg);
+    bool isComplete(int nReg);
+    bool isLine(int nReg);
 
-    void runStar();
-    void runCycle();
-    void runComplete();
-    void runLine();
+    int runStar();
+    int runCycle();
+    int runComplete();
+    int runLine();
 };
 
 #endif //PROJECT2_INTERFERENCEMAN_H

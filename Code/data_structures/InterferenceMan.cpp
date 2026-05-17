@@ -63,7 +63,7 @@ int InterferenceMan::runLinearScan(int nReg) {
     for (const Web& web : webs) {
         // here I decided to iterate backwards because of removing while iterating
         for (int i = active.size() - 1; i >= 0; i--) {
-            if (active.at(i).getDeath() < web.getBirth()) {
+            if (active.at(i).getDeath() <= web.getBirth()) {
 
                 int reg_to_free = assigned_registers[active.at(i)];
                 free_regs[reg_to_free] = true;

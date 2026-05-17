@@ -12,6 +12,111 @@
 
 using namespace std;
 
+bool InterferenceMan::isStar(){
+    int n = graph.getNumVertex();
+    if (n < 2) return false;
+    int numCenter = 0;
+    for (auto v : graph.getVertexSet()) {
+        int degree = (int)v->getAdj().size();
+        if (degree == n-1) numCenter++;
+        else if (degree != 1) return false;
+    }
+    return numCenter == 1;
+}
+
+void InterferenceMan::runStar(){
+    register_colors.clear();
+    int n = graph.getNumVertex();
+    for (auto v : graph.getVertexSet()){
+        if ((int)v->getAdj().size() != 1) register_colors[v->getInfo()] = 0;
+        else register_colors[v->getInfo()] = 1;
+    }
+}
+
+bool InterferenceMan::isCycle() {
+    if (graph.getNumVertex() < 3) return false;
+    for (auto v : graph.getVertexSet()) {
+        if ((int)v->getAdj().size() != 2) return false;
+    }
+    return true;
+}
+
+void InterferenceMan::runCycle(){
+    register_colors.clear();
+    auto start = graph.getVertexSet()[0];
+    Vertex<Web>* previous = nullptr;
+    Vertex<Web>* current = start;
+    int color = 0;
+    while(register_colors.find(current->getInfo()) == register_colors.end()) {
+        register_colors[current->getInfo()];
+        if (color == 0) color = 1;
+        else color = 0;
+        for(auto e : current->getAdj()) {
+            if (e->getDest() != previous) {
+                previous = current;
+                current = e->getDest();
+                break;
+            }
+        }
+    }
+    //odd cycles
+    if (register_colors[current->getInfo()] == register_colors[previous->getInfo()]) register_colors[previous->getInfo()] = 2;
+}
+
+bool InterferenceMan::isComplete() {
+    int n = graph.getNumVertex();
+    for (auto v : graph.getVertexSet()) {
+        if ((int)v->getAdj().size() != n-1) return false;
+    }
+    return true;
+}
+
+void InterferenceMan::runComplete(){
+    register_colors.clear();
+    int current = 0;
+    for (auto v : graph.getVertexSet()) register_colors[v->getInfo()] = current++;
+}
+
+bool InterferenceMan::isLine() {
+    if (graph.getNumVertex() < 2) return false;
+    int endPoints = 0;
+    for (auto v : graph.getVertexSet()) {
+        int degree = (int)v->getAdj().size();
+        if (degree == 1) endPoints++;
+        else if (degree != 2) return false;
+    }
+    return endPoints == 2; 
+}
+
+void InterferenceMan::runLine(){
+    register_colors.clear();
+    Vertex<Web>* start = nullptr;
+    for (auto v : graph.getVertexSet()){
+        if ((int)v->getAdj().size() == 1) {
+            start = v;
+            break;
+        }
+    }
+
+    Vertex<Web>* previous = nullptr;
+    Vertex<Web>* current = start;
+    int color = 0;
+    while(current != nullptr) {
+        register_colors[current->getInfo()] = color;
+        if (color == 0) color = 1;
+        else color = 0;
+        Vertex<Web>* next = nullptr;
+        for (auto e : current->getAdj()) {
+            if (e->getDest() != previous) {
+                next = e->getDest();
+                break;
+            }
+        }
+        previous = current;
+        current = next;
+    }
+}
+
 void InterferenceMan::startInterference() {
     // in this case, each Web will be represented by a node in the graph and,
     // for variables where there is an interference, we need to add an edge between their nodes
@@ -296,7 +401,16 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
 }
 
 int InterferenceMan::runFree(int nReg) {
-    return runLinearScan(nReg);
+    if(isStar()) runStar();
+    else if (isCycle()) runCycle();
+    else if (isComplete()) runComplete();
+    else if (isLine()) runLine();
+    else return runLinearScan(nReg);
+
+    int maxColor = 0;
+    for (auto& [web,color] : register_colors) maxColor = max(maxColor, color);
+    if (maxColor + 1 > nReg) return runLinearScan(nReg);
+    return maxColor + 1;
 }
 
 void InterferenceMan::outputResultsSuccess(string output_filename) const{

@@ -426,6 +426,8 @@ bool RegAllocator::runSpilling(int nReg, int maxSpills) {
 bool RegAllocator::runSplitting(int nReg, int maxSplits) {
     if (runBasic(nReg) != -1) return true;
 
+    splitWebs.clear();
+
     Graph<Web> copy = graph;
 
     for(int numSplits = 0; numSplits <= maxSplits; numSplits++){
@@ -477,6 +479,13 @@ bool RegAllocator::runSplitting(int nReg, int maxSplits) {
 
         if (runBasic(nReg, copy) != -1) {
             nSplits = numSplits + 1;
+
+            // store the final web list from the copy
+            splitWebs.clear();
+            for (auto v : copy.getVertexSet()) {
+                splitWebs.push_back(v->getInfo());
+            }
+
             return true;
         }
     }
@@ -498,7 +507,8 @@ int RegAllocator::runFree(int nReg) {
 void RegAllocator::outputResultsSuccess(string output_filename) const{
     ofstream output_file("Output/" + output_filename);
 
-    const vector<Web>& webs = peter_parker.getWebs();
+    // use splitWebs if splitting was performed, otherwise use original webs
+    const vector<Web>& webs = splitWebs.empty() ? peter_parker.getWebs() : splitWebs;
 
     // não sei se estas duas linhas têm de estar mas é ok yolo
     output_file << "# Total number of webs followed by the listing of the program points of each one" << endl;

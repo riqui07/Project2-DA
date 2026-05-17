@@ -125,7 +125,7 @@ private:
      *
      * @note Time Complexity: O(W^2), W is the number of webs.
      */
-    int runBasic(int nReg, Graph<Web> g);
+    int runBasic(int nReg, const Graph<Web>& g);
 
     /**
      * @brief Checks if the interference graph is a star (one central node connected to all others).

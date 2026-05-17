@@ -12,13 +12,13 @@
 
 using namespace std;
 
-bool InterferenceMan::isStar(int nReg){
+bool InterferenceMan::isStar(int nReg) const {
     if (nReg < 2) return false;
     int n = graph.getNumVertex();
     if (n < 2) return false;
     int numCenter = 0;
     for (auto v : graph.getVertexSet()) {
-        int degree = (int)v->getAdj().size();
+        int degree = static_cast<int>(v->getAdj().size());
         if (degree == n-1) numCenter++;
         else if (degree != 1) return false;
     }
@@ -28,16 +28,16 @@ bool InterferenceMan::isStar(int nReg){
 int InterferenceMan::runStar(){
     register_colors.clear();
     for (auto v : graph.getVertexSet()){
-        if ((int)v->getAdj().size() != 1) register_colors[v->getInfo()] = 0;
+        if (static_cast<int>(v->getAdj().size()) != 1) register_colors[v->getInfo()] = 0;
         else register_colors[v->getInfo()] = 1;
     }
     return 2;
 }
 
-bool InterferenceMan::isCycle(int nReg) {
+bool InterferenceMan::isCycle(int nReg) const {
     if (graph.getNumVertex() < 3 || nReg < 2) return false;
     for (auto v : graph.getVertexSet()) {
-        if ((int)v->getAdj().size() != 2) return false;
+        if (static_cast<int>(v->getAdj().size()) != 2) return false;
     }
     //odd cycle needs 3 registers
     if (nReg < 3 && graph.getNumVertex() % 2 != 0) return false;
@@ -70,11 +70,11 @@ int InterferenceMan::runCycle(){
     return 2;
 }
 
-bool InterferenceMan::isComplete(int nReg) {
+bool InterferenceMan::isComplete(int nReg) const {
     int n = graph.getNumVertex();
     if (nReg < n) return false; 
     for (auto v : graph.getVertexSet()) {
-        if ((int)v->getAdj().size() != n-1) return false;
+        if (static_cast<int>(v->getAdj().size()) != n-1) return false;
     }
     return true;
 }
@@ -86,12 +86,12 @@ int InterferenceMan::runComplete(){
     return current;
 }
 
-bool InterferenceMan::isLine(int nReg) {
+bool InterferenceMan::isLine(int nReg) const {
     if (nReg < 2) return false;
     if (graph.getNumVertex() < 2) return false;
     int endPoints = 0;
     for (auto v : graph.getVertexSet()) {
-        int degree = (int)v->getAdj().size();
+        int degree = static_cast<int>(v->getAdj().size());
         if (degree == 1) endPoints++;
         else if (degree != 2) return false;
     }
@@ -102,7 +102,7 @@ int InterferenceMan::runLine(){
     register_colors.clear();
     Vertex<Web>* start = nullptr;
     for (auto v : graph.getVertexSet()){
-        if ((int)v->getAdj().size() == 1) {
+        if (static_cast<int>(v->getAdj().size()) == 1) {
             start = v;
             break;
         }
@@ -337,7 +337,7 @@ bool InterferenceMan::runSpilling(int nReg, int maxSpills) {
         int currentHighest = -1;
 
         for(auto v : copy.getVertexSet()){
-            int degree = (int)v->getAdj().size();
+            int degree = static_cast<int>(v->getAdj().size());
             if (degree > currentHighest) {
                 currentHighest = degree;
                 highestDegree = v;
@@ -367,7 +367,7 @@ bool InterferenceMan::runSplitting(int nReg, int maxSplits) {
         int currentHighest = -1;
 
         for(auto v : copy.getVertexSet()){
-            int degree = (int)v->getAdj().size();
+            int degree = static_cast<int>(v->getAdj().size());
             // não podemos dar split a uma web com 1 só linha
             if (degree > currentHighest && v->getInfo().getLines().size() >= 2) {
                 currentHighest = degree;

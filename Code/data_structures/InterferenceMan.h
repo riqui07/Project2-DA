@@ -120,7 +120,7 @@ private:
      *
      * @note Time Complexity: O(W), W is the number of webs.
      */
-    bool isStar(int nReg);
+    bool isStar(int nReg) const;
 
     /**
      * @brief Checks if the interference graph is a cycle (all nodes have degree 2).
@@ -129,7 +129,7 @@ private:
      *
      * @note Time Complexity: O(W), W is the number of webs.
      */
-    bool isCycle(int nReg);
+    bool isCycle(int nReg) const;
 
     /**
      * @brief Checks if the interference graph is a complete graph (all nodes connected to each other).
@@ -138,7 +138,7 @@ private:
      *
      * @note Time Complexity: O(W), W is the number of webs.
      */
-    bool isComplete(int nReg);
+    bool isComplete(int nReg) const;
 
     /**
      * @brief Checks if the interference graph is a line (path graph with exactly 2 endpoints).
@@ -147,7 +147,7 @@ private:
      *
      * @note Time Complexity: O(W), W is the number of webs.
      */
-    bool isLine(int nReg);
+    bool isLine(int nReg) const;
 
     /**
      * @brief Linear scan register allocation algorithm.
